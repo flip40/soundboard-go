@@ -41,8 +41,9 @@ jobs:
 
       - name: Check local
         run: |
-          echo "$PATH"
+          echo "$env:PATH"
           ls C:\Strawberry\perl\bin\pkg-config.bat
+          $env:PATH = "C:\Strawberry\perl\bin\pkg-config.bat;$env:PATH"
 
       - name: Setup PortAudio
         run: |

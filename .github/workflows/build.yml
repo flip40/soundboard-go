@@ -42,7 +42,7 @@ jobs:
       - name: Setup PortAudio
         run: |
           $env:PATH = "C:\msys64\usr\bin;$env:PATH"
-          pacman --no-confirm -S mingw-w64-x86_64-portaudio
+          pacman --noconfirm -S mingw-w64-x86_64-portaudio
 
       - name: Checkout
         uses: actions/checkout@v2

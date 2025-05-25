@@ -27,10 +27,6 @@ jobs:
           #   platform:  'darwin/universal'
           #   os: 'macos-latest'
 
-    defaults:
-      run:
-        shell: bash
-
     runs-on: ${{ matrix.build.os }}
     steps:
       # - uses: shogo82148/actions-setup-perl@v1
@@ -44,7 +40,9 @@ jobs:
       #     platform: x64
 
       - name: Setup PortAudio
-        run: pacman -S mingw-w64-x86_64-portaudio
+        run: |
+          $env:PATH = "C:\msys64\usr\bin;$env:PATH"
+          pacman -S mingw-w64-x86_64-portaudio
 
       - name: Checkout
         uses: actions/checkout@v2

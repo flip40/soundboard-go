@@ -27,6 +27,10 @@ jobs:
           #   platform:  'darwin/universal'
           #   os: 'macos-latest'
 
+    defaults:
+      run:
+        shell: bash
+
     runs-on: ${{ matrix.build.os }}
     steps:
       # - uses: shogo82148/actions-setup-perl@v1

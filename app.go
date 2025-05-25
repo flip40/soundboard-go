@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gordonklaus/portaudio"
+	"github.com/gen2brain/malgo"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	hook "github.com/robotn/gohook"
@@ -15,6 +15,7 @@ import (
 type App struct {
 	ctx             context.Context
 	keypressChannel chan string
+	audioCtx        *malgo.AllocatedContext
 }
 
 func NewApp() *App {
@@ -46,19 +47,35 @@ func (b *App) startup(ctx context.Context) {
 
 	go b.eventProcessor()
 
-	if err := portaudio.Initialize(); err != nil {
+	// if err := portaudio.Initialize(); err != nil {
+	// 	panic(err)
+	// }
+
+	// audioDevices, err := portaudio.Devices()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	audioCtx, err := malgo.InitContext(nil, malgo.ContextConfig{}, func(message string) {
+		fmt.Printf("LOG <%v>\n", message)
+	})
+	if err != nil {
 		panic(err)
 	}
+	b.audioCtx = audioCtx
 
-	audioDevices, err := portaudio.Devices()
+	audioDevices, err := audioCtx.Devices(malgo.Playback)
 	if err != nil {
 		panic(err)
 	}
 
 	go func() {
 		var deviceInfoString []string
+		// for _, device := range audioDevices {
+		// 	deviceInfoString = append(deviceInfoString, device.Name)
+		// }
 		for _, device := range audioDevices {
-			deviceInfoString = append(deviceInfoString, device.Name)
+			deviceInfoString = append(deviceInfoString, device.Name())
 		}
 
 		_, err := runtime.MessageDialog(b.ctx, runtime.MessageDialogOptions{
@@ -127,7 +144,8 @@ func (b *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
 	hook.End()
 	close(b.keypressChannel)
-	portaudio.Terminate()
+	// portaudio.Terminate()
+	b.audioCtx.Free()
 }
 
 func (b *App) domReady(ctx context.Context) {

@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.24.3
 
 require (
-	github.com/gordonklaus/portaudio v0.0.0-20250206071425-98a94950218b
+	github.com/gen2brain/malgo v0.11.23
 	github.com/robotn/gohook v0.42.2
 	github.com/wailsapp/wails/v2 v2.10.1
 )

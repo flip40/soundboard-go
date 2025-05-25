@@ -34,10 +34,10 @@ jobs:
       #     perl-version: "5.32"
       #     distribution: strawberry
 
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
+      # - name: Set up MinGW
+      #   uses: egor-tensin/setup-mingw@v2
+      #   with:
+      #     platform: x64
 
       - name: Setup PortAudio
         run: pacman -S mingw-w64-x86_64-portaudio

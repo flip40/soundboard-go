@@ -39,6 +39,11 @@ jobs:
       #   with:
       #     platform: x64
 
+      - name: Check local
+        run: |
+          echo "$PATH"
+          ls C:\Strawberry\perl\bin\pkg-config.bat
+
       - name: Setup PortAudio
         run: |
           $env:PATH = "C:\msys64\usr\bin;$env:PATH"

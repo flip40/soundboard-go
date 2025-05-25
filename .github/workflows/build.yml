@@ -29,6 +29,11 @@ jobs:
 
     runs-on: ${{ matrix.build.os }}
     steps:
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: "5.32"
+          distribution: strawberry
+
       - name: Checkout
         uses: actions/checkout@v2
         with:

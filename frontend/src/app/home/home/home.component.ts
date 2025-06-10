@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 // import { GetKeycodes } from 'wailsjs/go/keycodes/KeycodeHelper';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
+    selector: 'home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
     standalone: false,
 })
-export class AppComponent {
-  // title = 'frontend';
-  // keycodes: Record<number, string> = {};
+export class HomeComponent {
+  // @Input() keycodes: Record<number, string> = {};
 
   constructor() {
 

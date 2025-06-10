@@ -4,6 +4,7 @@ import (
 	"embed"
 	"log"
 
+	"github.com/flip40/soundboard-go/backend/keycodes"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -19,7 +20,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "{{.ProjectName}}",
+		Title:  "Sound Board",
 		Width:  720,
 		Height: 570,
 		// MinWidth:          720,
@@ -39,6 +40,8 @@ func main() {
 		OnShutdown:        app.shutdown,
 		Bind: []interface{}{
 			app,
+			&keycodes.KeycodeHelper{},
+			// &soundhotkey.HotkeyHelper{},
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{

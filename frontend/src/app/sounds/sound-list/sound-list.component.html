@@ -1,11 +1,5 @@
 <div>
-    <table
-        theme={theme}
-        pathWidth={this.state.pathWidth}
-        hotkeyWidth={this.state.hotkeyWidth}
-        hotkeyAdjust={this.state.hotkeyAdjust}
-        tableHeight={this.state.tableHeight}
-        scrollbarActive={this.state.scrollbarActive}>
+    <table>
         <thead id="soundtablehead">
             <tr>
                 <th>Sound File</th>
@@ -19,10 +13,10 @@
                     <td>{{ hotkeyToString(hotkey.Hotkey) }}</td>
                 </tr>
             } -->
-            @for (hotkey of soundHotkeys; track hotkey.ID) {
+            @for (hotkey of this.soundHotkeysService.soundHotkeys(); track hotkey.ID) {
                 <tr (dblclick)="editHotkey(hotkey.ID)" (contextmenu)="openContextMenu($event, hotkey.ID)">
                     <td>{{ fileFromPath(hotkey.Path) }}</td>
-                    <td>{{ hotkeyToString(hotkey.Hotkey) }}</td>
+                    <td>{{ hotkeyToString(hotkey?.Hotkey) }}</td>
                 </tr>
             }
         </tbody>

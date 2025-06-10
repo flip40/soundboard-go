@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { DeviceModule } from '../devices/device.module'
 import { SoundModule } from '../sounds/sound.module'
 
-import { provideRouter } from '@angular/router';
+// import { provideRouter } from '@angular/router';
 // import routeConfig from './routes';
 
 @NgModule({

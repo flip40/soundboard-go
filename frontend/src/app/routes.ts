@@ -1,17 +1,18 @@
 import { Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home/home.component';
+import { HotkeyEditorComponent } from './hotkeys/hotkey-editor/hotkey-editor.component';
 
 const routeConfig: Routes = [
   {
     path: '',
     component: HomeComponent,
-    title: 'Home page',
+    title: 'Home',
   },
-  // {
-  //   path: 'details/:id',
-  //   component: Details,
-  //   title: 'Home details',
-  // },
+  {
+    path: 'edit-hotkey/:id',
+    component: HotkeyEditorComponent,
+    title: 'Hotkey Editor',
+  },
 ];
 export default routeConfig;

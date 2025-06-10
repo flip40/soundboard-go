@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-// import { GetKeycodes } from 'wailsjs/go/keycodes/KeycodeHelper';
+import { Component, inject } from '@angular/core';
+import { AddSounds } from 'wailsjs/go/main/App'
+import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
 
 @Component({
     selector: 'home',
@@ -8,17 +9,19 @@ import { Component, Input } from '@angular/core';
     standalone: false,
 })
 export class HomeComponent {
-  // @Input() keycodes: Record<number, string> = {};
+  soundhotkeysService = inject(SoundHotkeysService);
 
   constructor() {
 
-    // GetKeycodes().then((keycodes) => {
-    //   this.keycodes = keycodes;
-    // });
   }
 
+  addSounds() {
+    AddSounds().then(() => {
+      this.soundhotkeysService.updateHotkeys();
+    });
+  }
 
-      // GetPlaybackDeviceInfo().then((devices) => {
-      //   this.devices = devices;
-      // });
+  setStopHotkey() {
+
+  }
 }

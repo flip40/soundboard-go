@@ -3,11 +3,11 @@
 import {audiodevice} from '../models';
 import {soundhotkey} from '../models';
 
+export function AddSounds():Promise<void>;
+
 export function GetPlaybackDeviceInfo():Promise<Array<audiodevice.AudioDevice>>;
 
 export function GetSoundHotkeys():Promise<Array<soundhotkey.SoundHotkey>>;
-
-export function Greet(arg1:string):Promise<string>;
 
 export function PlaySound(arg1:string):Promise<void>;
 

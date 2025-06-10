@@ -87,10 +87,6 @@ func (b *App) domReady(ctx context.Context) {
 	// b.ShowDialog()
 }
 
-func (b *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
-}
-
 func (b *App) ShowDialog(message string) {
 	if _, err := runtime.MessageDialog(b.ctx, runtime.MessageDialogOptions{
 		Type:    runtime.InfoDialog,
@@ -98,6 +94,28 @@ func (b *App) ShowDialog(message string) {
 		Message: message,
 	}); err != nil {
 		panic(err)
+	}
+}
+
+func (b *App) AddSounds() {
+	sounds, err := runtime.OpenMultipleFilesDialog(b.ctx, runtime.OpenDialogOptions{
+		// DefaultDirectory: "",
+		Title: "Add Sounds...",
+		Filters: []runtime.FileFilter{
+			{DisplayName: "Sound File", Pattern: "*.wav;*.mp3"},
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// check if no files were returned
+	if sounds == nil {
+		return
+	}
+
+	for _, sound := range sounds {
+		b.soundHotkeys = append(b.soundHotkeys, sh.NewSoundHotkey(sound, nil))
 	}
 }
 

@@ -5,10 +5,10 @@ import { GetPlaybackDeviceInfo, SetPlaybackDevice } from "wailsjs/go/main/App"
 import { audiodevice } from 'wailsjs/go/models';
 
 @Component({
-    selector: 'device-list',
-    templateUrl: './device-list.component.html',
-    styleUrls: ['./device-list.component.scss'],
-    standalone: false,
+  selector: 'device-list',
+  templateUrl: './device-list.component.html',
+  styleUrls: ['./device-list.component.scss'],
+  standalone: false,
 })
 export class DeviceListComponent {
   // @Input() extDevices = [];
@@ -21,7 +21,7 @@ export class DeviceListComponent {
     GetPlaybackDeviceInfo().then((devices) => {
       this.devices = devices;
     });
-  }  
+  }
 
   onChange(event: Event) {
     SetPlaybackDevice(this.selectedDevice);

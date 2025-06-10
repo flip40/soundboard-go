@@ -3,22 +3,22 @@ import { GetSoundHotkeys } from 'wailsjs/go/main/App';
 import { soundhotkey } from 'wailsjs/go/models';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class SoundHotkeysService {
-    soundHotkeys = signal<soundhotkey.SoundHotkey[]>([]);
+  soundHotkeys = signal<soundhotkey.SoundHotkey[]>([]);
 
-    constructor() {
-        this.updateHotkeys();
-    }
+  constructor() {
+    this.updateHotkeys();
+  }
 
-    getHotkeys(): soundhotkey.SoundHotkey[] {
-        return this.soundHotkeys();
-    }
+  getHotkeys(): soundhotkey.SoundHotkey[] {
+    return this.soundHotkeys();
+  }
 
-    updateHotkeys() {
-        GetSoundHotkeys().then((soundHotkeys) => {
-            this.soundHotkeys.set(soundHotkeys);
-        });
-    }
+  updateHotkeys() {
+    GetSoundHotkeys().then((soundHotkeys) => {
+      this.soundHotkeys.set(soundHotkeys);
+    });
+  }
 }

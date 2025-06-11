@@ -1,5 +1,26 @@
 package keycodes
 
+import "slices"
+
+var keycodeGroups = map[KeycodeGroup]Keycodes{
+	KeycodeGroupAll: slices.Concat(
+		characters,
+		numbers,
+		numpad,
+		modifiers,
+		arrows,
+		special,
+		fkeys,
+	),
+	KeycodeGroupCharacters:   characters,
+	KeycodeGroupNumbers:      numbers,
+	KeycodeGroupNumpad:       numpad,
+	KeycodeGroupModifiers:    modifiers,
+	KeycodeGroupArrows:       arrows,
+	KeycodeGroupSpecial:      special,
+	KeycodeGroupFunctionKeys: fkeys,
+}
+
 var characters = Keycodes{
 	{65, "A", "KeyA"},
 	{66, "B", "KeyB"},

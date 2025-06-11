@@ -1,7 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { GetSoundHotkeys, ShowDialog } from 'wailsjs/go/main/App';
-import { soundhotkey } from 'wailsjs/go/models';
+import { ShowDialog } from 'wailsjs/go/main/App';
 import { KeycodeService } from 'src/app/shared/keycodes/keycode.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
 // import { HotkeyToString } from 'wailsjs/go/soundhotkey/HotkeyHelper';

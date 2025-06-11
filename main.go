@@ -41,7 +41,11 @@ func main() {
 		Bind: []interface{}{
 			app,
 			&keycodes.KeycodeHelper{},
+			&keycodes.Keycode{},
 			// &soundhotkey.HotkeyHelper{},
+		},
+		EnumBind: []interface{}{
+			keycodes.KeycodeGroups,
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{

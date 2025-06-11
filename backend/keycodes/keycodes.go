@@ -1,119 +1,135 @@
 package keycodes
 
+import (
+	"slices"
+)
+
+// combines all keycode groups
+var allKeycodes Keycodes
+
+// map of map of raw codes to strings
+var rawcodeGroups map[KeycodeGroup]map[uint16]Keycode
+
+// map of map of strings to raw codes
+var displayGroups map[KeycodeGroup]map[string]Keycode
+
+// map of map of strings to raw codes
+var jsCodeGroups map[KeycodeGroup]map[string]Keycode
+
 func init() {
-	rawcodeStrings = make(map[string]uint16)
-	for k, v := range rawcodes {
-		rawcodeStrings[v] = k
+	allKeycodes = slices.Concat(
+		characters,
+		numbers,
+		numpad,
+		modifiers,
+		arrows,
+		special,
+		fkeys,
+	)
+
+	// build map of rawcode groups
+	rawcodeGroups = map[KeycodeGroup]map[uint16]Keycode{
+		KeycodeGroupAll:          allKeycodes.mapByRawcode(),
+		KeycodeGroupCharacters:   characters.mapByRawcode(),
+		KeycodeGroupNumbers:      numbers.mapByRawcode(),
+		KeycodeGroupNumpad:       numpad.mapByRawcode(),
+		KeycodeGroupModifiers:    modifiers.mapByRawcode(),
+		KeycodeGroupArrows:       arrows.mapByRawcode(),
+		KeycodeGroupSpecial:      special.mapByRawcode(),
+		KeycodeGroupFunctionKeys: fkeys.mapByRawcode(),
+	}
+
+	// build map of string groups
+	displayGroups = map[KeycodeGroup]map[string]Keycode{
+		KeycodeGroupAll:          allKeycodes.mapByDisplay(),
+		KeycodeGroupCharacters:   characters.mapByDisplay(),
+		KeycodeGroupNumbers:      numbers.mapByDisplay(),
+		KeycodeGroupNumpad:       numpad.mapByDisplay(),
+		KeycodeGroupModifiers:    modifiers.mapByDisplay(),
+		KeycodeGroupArrows:       arrows.mapByDisplay(),
+		KeycodeGroupSpecial:      special.mapByDisplay(),
+		KeycodeGroupFunctionKeys: fkeys.mapByDisplay(),
+	}
+
+	// build map of JSCode groups
+	jsCodeGroups = map[KeycodeGroup]map[string]Keycode{
+		KeycodeGroupAll:          allKeycodes.mapByJSCode(),
+		KeycodeGroupCharacters:   characters.mapByJSCode(),
+		KeycodeGroupNumbers:      numbers.mapByJSCode(),
+		KeycodeGroupNumpad:       numpad.mapByJSCode(),
+		KeycodeGroupModifiers:    modifiers.mapByJSCode(),
+		KeycodeGroupArrows:       arrows.mapByJSCode(),
+		KeycodeGroupSpecial:      special.mapByJSCode(),
+		KeycodeGroupFunctionKeys: fkeys.mapByJSCode(),
 	}
 }
 
-var rawcodeStrings map[string]uint16
+type KeycodeGroup int
 
-// map of raw codes to strings
-var rawcodes = map[uint16]string{
-	// characters
-	65: "a",
-	66: "b",
-	67: "c",
-	68: "d",
-	69: "e",
-	70: "f",
-	71: "g",
-	72: "h",
-	73: "i",
-	74: "j",
-	75: "k",
-	76: "l",
-	77: "m",
-	78: "n",
-	79: "o",
-	80: "p",
-	81: "q",
-	82: "r",
-	83: "s",
-	84: "t",
-	85: "u",
-	86: "v",
-	87: "w",
-	88: "x",
-	89: "y",
-	90: "z",
+const (
+	KeycodeGroupAll = iota
+	KeycodeGroupCharacters
+	KeycodeGroupNumbers
+	KeycodeGroupNumpad
+	KeycodeGroupModifiers
+	KeycodeGroupArrows
+	KeycodeGroupSpecial
+	KeycodeGroupFunctionKeys
+)
 
-	// numbers list
-	49:  "1",
-	50:  "2",
-	51:  "3",
-	52:  "4",
-	53:  "5",
-	54:  "6",
-	55:  "7",
-	56:  "8",
-	57:  "9",
-	48:  "0",
-	189: "-",
-	187: "=",
+var KeycodeGroups = []struct {
+	Value  KeycodeGroup
+	TSName string
+}{
+	{KeycodeGroupAll, "ALL"},
+	{KeycodeGroupCharacters, "CHARACTERS"},
+	{KeycodeGroupNumbers, "NUMBERS"},
+	{KeycodeGroupNumpad, "NUMPAD"},
+	{KeycodeGroupModifiers, "MODIFIERS"},
+	{KeycodeGroupArrows, "ARROWS"},
+	{KeycodeGroupSpecial, "SPECIAL"},
+	{KeycodeGroupFunctionKeys, "FUNCTIONKEYS"},
+}
 
-	// numpad
-	96:  "0",
-	97:  "1",
-	98:  "2",
-	99:  "3",
-	100: "4",
-	101: "5",
-	102: "6",
-	103: "7",
-	104: "8",
-	105: "9",
-	106: "*",
-	107: "+",
-	109: "-",
-	110: ".",
-	111: "/",
+type Keycode struct {
+	Rawcode uint16
+	Display string
+	JSCode  string
+}
 
-	// modifiers
-	162: "ctrl",
-	163: "rctl",
-	160: "shift",
-	161: "rshift",
-	164: "alt",
-	165: "ralt",
+// func (keycode Keycode) String() string {
+// 	return keycode.Display
+// }
 
-	// arrows
-	37: "left",
-	38: "up",
-	39: "right",
-	40: "down",
+func (keycode Keycode) Bind() Keycode {
+	return keycode
+}
 
-	// special
-	8:  "backspace",
-	9:  "tab",
-	20: "caps lock",
-	27: "escape",
-	32: "space",
-	91: "windows",
+type Keycodes []Keycode
 
-	186: ";",
-	188: ",",
-	190: ".",
-	191: "/",
-	192: "`",
+func (keycodes Keycodes) mapByRawcode() map[uint16]Keycode {
+	rawcodeMap := make(map[uint16]Keycode)
+	for _, keycode := range keycodes {
+		rawcodeMap[keycode.Rawcode] = keycode
+	}
 
-	219: "[",
-	220: "\\",
-	221: "]",
-	222: "'",
+	return rawcodeMap
+}
 
-	// function keys
-	112: "F1",
-	113: "F2",
-	114: "F3",
-	115: "F4",
-	116: "F5",
-	117: "F6",
-	118: "F7",
-	119: "F8",
-	120: "F9",
-	121: "F10",
-	122: "F11",
-	123: "F12",
+func (keycodes Keycodes) mapByDisplay() map[string]Keycode {
+	displayMap := make(map[string]Keycode)
+	for _, keycode := range keycodes {
+		displayMap[keycode.Display] = keycode
+	}
+
+	return displayMap
+}
+
+func (keycodes Keycodes) mapByJSCode() map[string]Keycode {
+	jsCodeMap := make(map[string]Keycode)
+	for _, keycode := range keycodes {
+		jsCodeMap[keycode.JSCode] = keycode
+	}
+
+	return jsCodeMap
 }

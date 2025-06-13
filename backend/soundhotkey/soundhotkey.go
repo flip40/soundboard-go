@@ -1,6 +1,7 @@
 package soundhotkey
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/flip40/soundboard-go/backend/keycodes"
@@ -23,17 +24,21 @@ type SoundHotkey struct {
 	Hotkey Hotkey
 }
 
-func NewSoundHotkey(path string, hotkey []uint16) SoundHotkey {
+func NewSoundHotkey(path string, hotkey []uint16) *SoundHotkey {
 	uuid, err := uuid.NewRandom()
 	if err != nil {
 		panic(err)
 	}
 
-	return SoundHotkey{
+	return &SoundHotkey{
 		ID:     uuid,
 		Path:   path,
 		Hotkey: hotkey,
 	}
+}
+
+func (sh *SoundHotkey) String() string {
+	return fmt.Sprintf("%+v", *sh)
 }
 
 // func (sh SoundHotkey) HotkeyToString() string {

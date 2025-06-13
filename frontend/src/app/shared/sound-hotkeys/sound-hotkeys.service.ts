@@ -16,9 +16,11 @@ export class SoundHotkeysService {
     return this.soundHotkeys();
   }
 
+  getHotkeyByID(id: number[]): soundhotkey.SoundHotkey | undefined {
+    return this.soundHotkeys().find(soundHotkey => soundHotkey.ID == id);
+  }
+
   updateHotkeys() {
-    GetSoundHotkeys().then((soundHotkeys) => {
-      this.soundHotkeys.set(soundHotkeys);
-    });
+    GetSoundHotkeys().then(soundHotkeys => this.soundHotkeys.set(soundHotkeys));
   }
 }

@@ -29,7 +29,7 @@ type App struct {
 	selectedDeviceID string
 	// playbackDeviceID string
 
-	soundHotkeys []sh.SoundHotkey
+	soundHotkeys []*sh.SoundHotkey
 	keysDown     map[uint16]struct{}
 }
 
@@ -41,11 +41,12 @@ func (b *App) startup(ctx context.Context) {
 	b.ctx = ctx
 
 	// DEBUG
-	b.soundHotkeys = []sh.SoundHotkey{
+	b.soundHotkeys = []*sh.SoundHotkey{
 		// 	Hotkey: []uint16{162, 87}, // CTRL+W
 		// 	Hotkey: []uint16{66}, // B
 		sh.NewSoundHotkey("path-to-sound-file", []uint16{66}),
 		sh.NewSoundHotkey("path-to-sound-file", []uint16{162, 87}),
+		sh.NewSoundHotkey("no hotkey set", nil),
 	}
 
 	// AUDIO SETUP
@@ -150,13 +151,13 @@ func (b *App) SetPlaybackDevice(id string) {
 	b.selectedDeviceID = id
 }
 
-func (b *App) GetSoundHotkeys() []sh.SoundHotkey {
+func (b *App) GetSoundHotkeys() []*sh.SoundHotkey {
 	return b.soundHotkeys
 }
 
-func (b *App) SetSoundHotkeys([]sh.SoundHotkey) {
+// func (b *App) SetSoundHotkeys([]sh.SoundHotkey) {
 
-}
+// }
 
 func (b *App) PlaySound(path string) {
 	deviceInfo, ok := b.playbackDevices[b.selectedDeviceID]
@@ -303,4 +304,34 @@ func (b *App) checkHotkeys() {
 			b.PlaySound(sound.Path)
 		}
 	}
+}
+
+func (b *App) SetHotkey(id string, hotkey []uint16) {
+	fmt.Printf("\n\nID TEST %+v\n\n", id)
+	// idAsUUID, _ := uuid.FromBytes(id[:])
+	fmt.Printf("setting hotkey %s to %+v\n", id, hotkey)
+	for i, sh := range b.soundHotkeys {
+		if sh.ID.String() == id {
+			b.soundHotkeys[i].Hotkey = hotkey
+		}
+	}
+	// TODO: log error if not found?
+
+	// TODO: DEBUG
+
+	fmt.Printf("Hotkeys after set: %+v\n", b.soundHotkeys)
+}
+
+// b.soundHotkeys = slices.Delete(b.soundHotkeys, i, i+1)
+// return
+
+func (b *App) ClearHotkey(id string) {
+	for i, sh := range b.soundHotkeys {
+		if sh.ID.String() == id {
+			b.soundHotkeys[i].Hotkey = nil
+		}
+	}
+
+	// TODO: DEBUG
+	fmt.Printf("Hotkeys after clear: %+v\n", b.soundHotkeys)
 }

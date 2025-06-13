@@ -25,32 +25,11 @@ export class SoundListComponent {
   // selectedDevice: number[] = [];
 
   constructor(private router: Router) {
-
+    this.soundHotkeysService.updateHotkeys();
   }
 
   fileFromPath(path: string): string {
     return path.replace(/^.*[\\\/]/, '');
-  }
-
-  hotkeyToString(hotkey: number[] | undefined): string {
-    // TODO: hotkey is probably going to need to be an array unless we do the conversion here... Maybe we can handle a lot of this by
-    //       sending hotkey updates directly to Go, though
-    // return hotkey ? hotkey.map((keyCode: KeyCode) => { return keyCode.electronCode; }).join("+") : ""
-    // let str = await HotkeyToString(hotkey).then((result) => {
-    //   return result;
-    // })
-
-    if (hotkey == undefined) {
-      return "";
-    }
-
-    let keys: string[] = [];
-    hotkey.forEach((rawcode: number) => {
-      keys.push(this.keycodeService.rawcodeToString(rawcode))
-    });
-
-    // return HotkeyToString(hotkey)
-    return keys.join("+");
   }
 
   editHotkey(hotkeyID: number[]) {

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
+import { KeycodeService } from 'src/app/shared/keycodes/keycode.service';
+import { keycodes } from 'wailsjs/go/models';
 // import { GetKeycodes } from 'wailsjs/go/keycodes/KeycodeHelper';
 
 @Component({
@@ -8,14 +10,22 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
+  keycodeService: KeycodeService = inject(KeycodeService);
   // title = 'frontend';
   // keycodes: Record<number, string> = {};
 
   constructor() {
-
     // GetKeycodes().then((keycodes) => {
     //   this.keycodes = keycodes;
     // });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    // Ignore Ctrl+A
+    if (event.ctrlKey && event.code == this.keycodeService.displayGroups[keycodes.KeycodeGroup.ALL]["A"].JSCode) {
+      event.preventDefault();
+    }
   }
 
 

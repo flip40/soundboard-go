@@ -1,4 +1,16 @@
 <div>
-    <span>Hotkey ID: {{ hotkeyID() }}</span>
-    <a (dblclick)="toHome()">Go Back</a>
+    <div>
+        <span>Hotkey ID: {{ soundHotkeyID() }}</span>
+    </div>
+    <div>
+        <span>{{ this.keycodeService.rawcodesToString(this.oldHotkey) }}</span>
+    </div>
+    <div>
+        <span>{{ this.keycodeService.keycodesToString(this.newHotkey) }}</span>
+    </div>
+    <div>
+        <a (click)="setHotkey()">Set Hotkey</a>
+        <a (click)="clearHotkey()">Clear Hotkey</a>
+        <a (click)="goHome()">Cancel</a>
+    </div>
 </div>

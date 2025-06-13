@@ -42,6 +42,24 @@ export class KeycodeService {
   // }
 
   rawcodeToString(rawcode: number): string {
-    return this.rawcodeGroups[keycodes.KeycodeGroup.ALL][rawcode].Display;
+    // TODO: Test if this breaks when using a key we haven't defined in the raw codes. Maybe I can just use a smaller KeycodeGroup to test that easily.
+    return this.rawcodeGroups[keycodes.KeycodeGroup.ALL][rawcode]?.Display;
+    // return this.rawcodeGroups[keycodes.KeycodeGroup.ALL][rawcode]?.Display ?? "undefined"; // try this if it does break on testing
+  }
+
+  rawcodesToString(rawcodes: number[] | undefined): string {
+    return rawcodes ? rawcodes.map((rawcode) => { return this.rawcodeToString(rawcode); }).join("+") : "";
+  }
+
+  // rawcodesToKeycodes(rawcodes: number[] | undefined): string {
+  //   return rawcodes ? rawcodes.map((rawcode) => { return this.rawcodeToString(rawcode); }).join("+") : "";
+  // }
+
+  keycodesToString(keycodes: keycodes.Keycode[] | undefined): string {
+    return keycodes ? keycodes.map((keycode) => { return keycode.Display; }).join("+") : "";
+  }
+
+  keycodesToRawcodes(keycodes: keycodes.Keycode[] | undefined): number[] {
+    return keycodes ? keycodes.map((keycode) => { return keycode.Rawcode; }) : [];
   }
 }

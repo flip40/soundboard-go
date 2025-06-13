@@ -5,14 +5,16 @@ import {soundhotkey} from '../models';
 
 export function AddSounds():Promise<void>;
 
+export function ClearHotkey(arg1:string):Promise<void>;
+
 export function GetPlaybackDeviceInfo():Promise<Array<audiodevice.AudioDevice>>;
 
 export function GetSoundHotkeys():Promise<Array<soundhotkey.SoundHotkey>>;
 
 export function PlaySound(arg1:string):Promise<void>;
 
-export function SetPlaybackDevice(arg1:string):Promise<void>;
+export function SetHotkey(arg1:string,arg2:Array<number>):Promise<void>;
 
-export function SetSoundHotkeys(arg1:Array<soundhotkey.SoundHotkey>):Promise<void>;
+export function SetPlaybackDevice(arg1:string):Promise<void>;
 
 export function ShowDialog(arg1:string):Promise<void>;

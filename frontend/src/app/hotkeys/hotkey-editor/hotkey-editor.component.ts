@@ -1,10 +1,10 @@
 import { Component, inject, signal, HostListener, WritableSignal } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { KeycodeService } from 'src/app/shared/keycodes/keycode.service';
-import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { KeycodeService } from 'src/app/shared/keycode.service';
+import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 import { keycodes, soundhotkey } from 'wailsjs/go/models';
 import { debounce, BetterSet } from 'src/utils/helpers'
-import { SetHotkey, ClearHotkey } from 'wailsjs/go/main/App';
+import { SetHotkey, SetStopHotkey, ClearHotkey, ClearStopHotkey } from 'wailsjs/go/main/App';
 // import { AddSounds } from 'wailsjs/go/main/App'
 // import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
 
@@ -18,24 +18,31 @@ export class HotkeyEditorComponent {
   keycodeService: KeycodeService = inject(KeycodeService);
   soundHotkeysService = inject(SoundHotkeysService);
 
+  // soundHotkeyID: WritableSignal<number[]> = signal([]);
   soundHotkeyID: WritableSignal<number[]> = signal([]);
   soundHotkey: soundhotkey.SoundHotkey | undefined;
   oldHotkey: number[] | undefined = [];
   newHotkey: keycodes.Keycode[] = [];
+  isStop: boolean = false;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private capturing: boolean = false;
   private keysPressed: BetterSet<string> = new BetterSet<string>();
 
   constructor(private router: Router) {
-    this.activatedRoute.params.subscribe((params) => {
-      this.soundHotkeyID.set(params['id']);
+    const snapshot = this.activatedRoute.snapshot;
+    this.isStop = snapshot.queryParamMap.has('isStop') ? Boolean(snapshot.queryParamMap.get('isStop')) : false;
+
+    if (this.isStop) {
+      this.oldHotkey = this.soundHotkeysService.getStopHotkey();
+    } else {
+      this.soundHotkeyID.set(snapshot.params['id']);
       this.soundHotkey = this.soundHotkeysService.getHotkeyByID(this.soundHotkeyID());
       if (this.soundHotkey == undefined) {
         // TODO: ERROR, this should never happen
       }
       this.oldHotkey = this.soundHotkey?.Hotkey;
-    });
+    }
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -79,20 +86,29 @@ export class HotkeyEditorComponent {
   }, 100);
 
   setHotkey() {
-    console.log("this.soundHotkeyID:", this.soundHotkeyID());
-    SetHotkey(String(this.soundHotkeyID()), this.keycodeService.keycodesToRawcodes(this.newHotkey)).then(() => {
-      // TODO: Debug
-      console.log("set hotkey");
-      this.goHome();
-    });
+    if (this.isStop) {
+      SetStopHotkey(this.keycodeService.keycodesToRawcodes(this.newHotkey)).then(() => {
+        this.goHome();
+      });
+    } else {
+      console.log("this.soundHotkeyID:", this.soundHotkeyID());
+      SetHotkey(String(this.soundHotkeyID()), this.keycodeService.keycodesToRawcodes(this.newHotkey)).then(() => {
+        this.goHome();
+      });
+    }
   }
 
   clearHotkey() {
-    ClearHotkey(String(this.soundHotkeyID())).then(() => {
-      // TODO: Debug
-      console.log("cleared hotkey");
-      this.goHome();
-    });
+    if (this.isStop) {
+      ClearStopHotkey().then(() => {
+        this.goHome();
+      });
+    } else {
+      ClearHotkey(String(this.soundHotkeyID())).then(() => {
+        this.goHome();
+      });
+
+    }
   }
 
   goHome() {

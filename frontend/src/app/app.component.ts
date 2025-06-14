@@ -1,5 +1,5 @@
 import { Component, HostListener, inject } from '@angular/core';
-import { KeycodeService } from 'src/app/shared/keycodes/keycode.service';
+import { KeycodeService } from 'src/app/shared/keycode.service';
 import { keycodes } from 'wailsjs/go/models';
 // import { GetKeycodes } from 'wailsjs/go/keycodes/KeycodeHelper';
 

@@ -7,9 +7,13 @@ export function AddSounds():Promise<void>;
 
 export function ClearHotkey(arg1:string):Promise<void>;
 
+export function ClearStopHotkey():Promise<void>;
+
 export function GetPlaybackDeviceInfo():Promise<Array<audiodevice.AudioDevice>>;
 
 export function GetSoundHotkeys():Promise<Array<soundhotkey.SoundHotkey>>;
+
+export function GetStopHotkey():Promise<Array<number>>;
 
 export function PlaySound(arg1:string):Promise<void>;
 
@@ -17,4 +21,8 @@ export function SetHotkey(arg1:string,arg2:Array<number>):Promise<void>;
 
 export function SetPlaybackDevice(arg1:string):Promise<void>;
 
+export function SetStopHotkey(arg1:Array<number>):Promise<void>;
+
 export function ShowDialog(arg1:string):Promise<void>;
+
+export function StopAllSounds():Promise<void>;

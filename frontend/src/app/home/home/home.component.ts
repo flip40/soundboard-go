@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AddSounds } from 'wailsjs/go/main/App'
-import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
+import { Router } from '@angular/router';
+import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 
 @Component({
   selector: 'home',
@@ -11,7 +12,7 @@ import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.
 export class HomeComponent {
   soundhotkeysService = inject(SoundHotkeysService);
 
-  constructor() {
+  constructor(private router: Router) {
 
   }
 
@@ -22,6 +23,10 @@ export class HomeComponent {
   }
 
   setStopHotkey() {
-
+    this.router.navigate(["/edit-hotkey", "stop"], {
+      queryParams: {
+        isStop: true,
+      }
+    });
   }
 }

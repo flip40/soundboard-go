@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { GetSoundHotkeys } from 'wailsjs/go/main/App';
+import { GetSoundHotkeys, GetStopHotkey } from 'wailsjs/go/main/App';
 import { soundhotkey } from 'wailsjs/go/models';
 
 @Injectable({
@@ -7,6 +7,7 @@ import { soundhotkey } from 'wailsjs/go/models';
 })
 export class SoundHotkeysService {
   soundHotkeys = signal<soundhotkey.SoundHotkey[]>([]);
+  stopHotkey = signal<number[] | undefined>(undefined);
 
   constructor() {
     this.updateHotkeys();
@@ -20,7 +21,12 @@ export class SoundHotkeysService {
     return this.soundHotkeys().find(soundHotkey => soundHotkey.ID == id);
   }
 
+  getStopHotkey(): number[] | undefined {
+    return this.stopHotkey();
+  }
+
   updateHotkeys() {
     GetSoundHotkeys().then(soundHotkeys => this.soundHotkeys.set(soundHotkeys));
+    GetStopHotkey().then(stopHotkey => this.stopHotkey.set(stopHotkey));
   }
 }

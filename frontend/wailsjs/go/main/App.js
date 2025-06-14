@@ -10,12 +10,20 @@ export function ClearHotkey(arg1) {
   return window['go']['main']['App']['ClearHotkey'](arg1);
 }
 
+export function ClearStopHotkey() {
+  return window['go']['main']['App']['ClearStopHotkey']();
+}
+
 export function GetPlaybackDeviceInfo() {
   return window['go']['main']['App']['GetPlaybackDeviceInfo']();
 }
 
 export function GetSoundHotkeys() {
   return window['go']['main']['App']['GetSoundHotkeys']();
+}
+
+export function GetStopHotkey() {
+  return window['go']['main']['App']['GetStopHotkey']();
 }
 
 export function PlaySound(arg1) {
@@ -30,6 +38,14 @@ export function SetPlaybackDevice(arg1) {
   return window['go']['main']['App']['SetPlaybackDevice'](arg1);
 }
 
+export function SetStopHotkey(arg1) {
+  return window['go']['main']['App']['SetStopHotkey'](arg1);
+}
+
 export function ShowDialog(arg1) {
   return window['go']['main']['App']['ShowDialog'](arg1);
+}
+
+export function StopAllSounds() {
+  return window['go']['main']['App']['StopAllSounds']();
 }

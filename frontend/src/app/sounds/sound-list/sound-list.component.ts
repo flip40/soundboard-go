@@ -1,8 +1,8 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ShowDialog } from 'wailsjs/go/main/App';
-import { KeycodeService } from 'src/app/shared/keycodes/keycode.service';
-import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
+import { KeycodeService } from 'src/app/shared/keycode.service';
+import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 // import { HotkeyToString } from 'wailsjs/go/soundhotkey/HotkeyHelper';
 
 // TODO: This almost certainly should be passed in by App initially and updated in a different way...

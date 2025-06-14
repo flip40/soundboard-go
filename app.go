@@ -30,7 +30,11 @@ type App struct {
 	// playbackDeviceID string
 
 	soundHotkeys []*sh.SoundHotkey
+	stopHotkey   sh.Hotkey
 	keysDown     map[uint16]struct{}
+
+	stopFuncs      map[*sync.Once]func()
+	stopFuncsMutex sync.Mutex
 }
 
 func NewApp() *App {
@@ -39,15 +43,7 @@ func NewApp() *App {
 
 func (b *App) startup(ctx context.Context) {
 	b.ctx = ctx
-
-	// DEBUG
-	b.soundHotkeys = []*sh.SoundHotkey{
-		// 	Hotkey: []uint16{162, 87}, // CTRL+W
-		// 	Hotkey: []uint16{66}, // B
-		sh.NewSoundHotkey("path-to-sound-file", []uint16{66}),
-		sh.NewSoundHotkey("path-to-sound-file", []uint16{162, 87}),
-		sh.NewSoundHotkey("no hotkey set", nil),
-	}
+	b.stopFuncs = make(map[*sync.Once]func())
 
 	// AUDIO SETUP
 	audioCtx, err := malgo.InitContext(nil, malgo.ContextConfig{}, func(message string) {
@@ -155,6 +151,10 @@ func (b *App) GetSoundHotkeys() []*sh.SoundHotkey {
 	return b.soundHotkeys
 }
 
+func (b *App) GetStopHotkey() []uint16 {
+	return b.stopHotkey
+}
+
 // func (b *App) SetSoundHotkeys([]sh.SoundHotkey) {
 
 // }
@@ -211,20 +211,21 @@ func (b *App) PlaySound(path string) {
 
 	stopChan := make(chan struct{})
 	var stopOnce sync.Once
-	stopFunc := func() {
+	// stopFunc := func() {
+	// 	close(stopChan)
+	// }
+	b.stopFuncs[&stopOnce] = func() {
 		close(stopChan)
 	}
 	deviceCallbacks := malgo.DeviceCallbacks{
 		Data: func(pOutputSample, pInputSamples []byte, framecount uint32) {
 			// TODO: need to make some kind of interrupt here ? Use sync.Once
 			if _, err := io.ReadFull(reader, pOutputSample); err != nil {
-				stopOnce.Do(stopFunc)
+				stopOnce.Do(b.stopFuncs[&stopOnce])
 			}
 		},
 		Stop: func() {
-			// TODO: need to make some kind of interrupt here ? Use sync.Once
-			// stopChan <- struct{}{}
-			stopOnce.Do(stopFunc)
+			stopOnce.Do(b.stopFuncs[&stopOnce])
 		},
 	}
 
@@ -246,6 +247,10 @@ Playing:
 		select {
 		case _, ok := <-stopChan:
 			if !ok {
+				b.stopFuncsMutex.Lock()
+				defer b.stopFuncsMutex.Unlock()
+
+				delete(b.stopFuncs, &stopOnce)
 				break Playing
 			}
 		// TODO: REMOVE DEBUG!!!
@@ -253,6 +258,16 @@ Playing:
 			counter++
 			runtime.LogDebugf(b.ctx, "%d", counter)
 		}
+	}
+}
+
+func (b *App) StopAllSounds() {
+	b.stopFuncsMutex.Lock()
+	defer b.stopFuncsMutex.Unlock()
+
+	for stopOnce, stopFunc := range b.stopFuncs {
+		stopOnce.Do(stopFunc)
+		delete(b.stopFuncs, stopOnce)
 	}
 }
 
@@ -274,6 +289,7 @@ func (b *App) keyEventProcessor() {
 		}
 
 		b.checkHotkeys()
+		b.checkStopHotkey()
 	}
 }
 
@@ -295,14 +311,34 @@ func (b *App) checkHotkeys() {
 		for _, key := range sound.Hotkey {
 			if _, ok := b.keysDown[key]; !ok {
 				isPressed = false
+				break
 			}
 		}
 
 		if isPressed {
 			// TODO: PLAY SOUND
 			// fmt.Printf("Playing Sound for '%s'\n", sound.Path)
-			b.PlaySound(sound.Path)
+			go b.PlaySound(sound.Path)
 		}
+	}
+}
+
+func (b *App) checkStopHotkey() {
+	// skip if stop hotkey is not set
+	if len(b.stopHotkey) == 0 {
+		return
+	}
+
+	isPressed := true
+	for _, key := range b.stopHotkey {
+		if _, ok := b.keysDown[key]; !ok {
+			isPressed = false
+			break
+		}
+	}
+
+	if isPressed {
+		go b.StopAllSounds()
 	}
 }
 
@@ -334,4 +370,12 @@ func (b *App) ClearHotkey(id string) {
 
 	// TODO: DEBUG
 	fmt.Printf("Hotkeys after clear: %+v\n", b.soundHotkeys)
+}
+
+func (b *App) ClearStopHotkey() {
+	b.stopHotkey = nil
+}
+
+func (b *App) SetStopHotkey(hotkey []uint16) {
+	b.stopHotkey = hotkey
 }

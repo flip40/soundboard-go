@@ -29,18 +29,6 @@ export class KeycodeService {
     });
   }
 
-  // getKeycodes(): Record<number, string> {
-  //   return this.keycodes;
-  // }
-
-  // getKeycodeGroups(): Record<keycodes.KeycodeGroup, Record<number, string>> {
-  //   return this.keycodeGroups;
-  // }
-
-  // getKeycodeStringGroups(): Record<keycodes.KeycodeGroup, Record<string, number>> {
-  //   return this.keycodeStringGroups;
-  // }
-
   rawcodeToString(rawcode: number): string {
     // TODO: Test if this breaks when using a key we haven't defined in the raw codes. Maybe I can just use a smaller KeycodeGroup to test that easily.
     return this.rawcodeGroups[keycodes.KeycodeGroup.ALL][rawcode]?.Display;

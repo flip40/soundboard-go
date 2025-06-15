@@ -85,19 +85,20 @@ export class HotkeyEditorComponent {
     this.keysPressed = new BetterSet<string>();
   }, 100);
 
+  // TODO: Consider moving SetHotkey calls to hotkey service
   setHotkey() {
     if (this.isStop) {
       SetStopHotkey(this.keycodeService.keycodesToRawcodes(this.newHotkey)).then(() => {
         this.goHome();
       });
     } else {
-      console.log("this.soundHotkeyID:", this.soundHotkeyID());
       SetHotkey(String(this.soundHotkeyID()), this.keycodeService.keycodesToRawcodes(this.newHotkey)).then(() => {
         this.goHome();
       });
     }
   }
 
+  // TODO: Consider moving ClearHotkey calls to hotkey service
   clearHotkey() {
     if (this.isStop) {
       ClearStopHotkey().then(() => {

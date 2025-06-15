@@ -17,6 +17,8 @@ export function GetStopHotkey():Promise<Array<number>>;
 
 export function PlaySound(arg1:string):Promise<void>;
 
+export function RemoveSound(arg1:string):Promise<void>;
+
 export function SetHotkey(arg1:string,arg2:Array<number>):Promise<void>;
 
 export function SetPlaybackDevice(arg1:string):Promise<void>;

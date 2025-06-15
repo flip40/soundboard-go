@@ -26,6 +26,8 @@
         <Button theme={theme} onClick={() => { this.setState({ settingStopHotkey: true }); }}>Set Stop Hotkey</Button>
     </EditButtons> -->
 </div>
+<menu-list (notClicked)="closeContextMenu()" [leftPos]="contextMenuX" [topPos]="contextMenuY"
+    [isActive]="contextMenuActive" [menuItems]="contextMenuItems"></menu-list>
 
 
 <!-- {

@@ -1,0 +1,8 @@
+:host {
+    position: absolute;
+    background-color: white; // TODO: temp for debugging
+}
+
+:host(.hide) {
+    display: none;
+}

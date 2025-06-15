@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -378,4 +379,14 @@ func (b *App) ClearStopHotkey() {
 
 func (b *App) SetStopHotkey(hotkey []uint16) {
 	b.stopHotkey = hotkey
+}
+
+func (b *App) RemoveSound(id string) {
+	fmt.Printf("removing sound: %+v\n", id)
+	for i, sh := range b.soundHotkeys {
+		if sh.ID.String() == id {
+			b.soundHotkeys = slices.Delete(b.soundHotkeys, i, i+1)
+			return
+		}
+	}
 }

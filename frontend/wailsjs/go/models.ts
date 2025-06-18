@@ -3,6 +3,7 @@ export namespace audiodevice {
 	export class AudioDevice {
 	    ID: string;
 	    Name: string;
+	    Selected: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new AudioDevice(source);
@@ -12,6 +13,7 @@ export namespace audiodevice {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.ID = source["ID"];
 	        this.Name = source["Name"];
+	        this.Selected = source["Selected"];
 	    }
 	}
 
@@ -51,9 +53,9 @@ export namespace keycodes {
 export namespace soundhotkey {
 	
 	export class SoundHotkey {
-	    ID: number[];
-	    Path: string;
-	    Hotkey: number[];
+	    id: number[];
+	    path: string;
+	    hotkey: number[];
 	
 	    static createFrom(source: any = {}) {
 	        return new SoundHotkey(source);
@@ -61,9 +63,9 @@ export namespace soundhotkey {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.ID = source["ID"];
-	        this.Path = source["Path"];
-	        this.Hotkey = source["Hotkey"];
+	        this.id = source["id"];
+	        this.path = source["path"];
+	        this.hotkey = source["hotkey"];
 	    }
 	}
 

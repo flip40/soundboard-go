@@ -2,16 +2,19 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"slices"
+	"sort"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/flip40/soundboard-go/backend/audiodevice"
+	"github.com/flip40/soundboard-go/backend/soundboard"
 	sh "github.com/flip40/soundboard-go/backend/soundhotkey"
 	"github.com/gen2brain/malgo"
 	"github.com/hajimehoshi/go-mp3"
@@ -109,6 +112,7 @@ func (b *App) AddSounds() {
 
 	// check if no files were returned
 	if sounds == nil {
+		// TODO: Error?
 		return
 	}
 
@@ -133,13 +137,16 @@ func (b *App) GetPlaybackDeviceInfo() []audiodevice.AudioDevice {
 		panic(err)
 	}
 
-	var wrappedDevices []audiodevice.AudioDevice
+	var wrappedDevices audiodevice.AudioDevices
 	for _, device := range audioDevices {
 		wrappedDevices = append(wrappedDevices, audiodevice.AudioDevice{
-			ID:   device.ID.String(),
-			Name: device.Name(),
+			ID:       device.ID.String(),
+			Name:     device.Name(),
+			Selected: func() bool { return device.ID.String() == b.selectedDeviceID }(),
 		})
 	}
+
+	sort.Sort(wrappedDevices)
 
 	return wrappedDevices
 }
@@ -388,5 +395,78 @@ func (b *App) RemoveSound(id string) {
 			b.soundHotkeys = slices.Delete(b.soundHotkeys, i, i+1)
 			return
 		}
+	}
+}
+func (b *App) ResetSoundboard() {
+	b.StopAllSounds()
+
+	b.selectedDeviceID = ""
+	b.soundHotkeys = []*sh.SoundHotkey{}
+	b.stopHotkey = nil
+}
+
+func (b *App) LoadSoundboard() {
+	b.StopAllSounds()
+
+	sbFilePath, err := runtime.OpenFileDialog(b.ctx, runtime.OpenDialogOptions{
+		// DefaultDirectory: "",
+		Title: "Load Soundboard...",
+		Filters: []runtime.FileFilter{
+			{DisplayName: "Soundboard File", Pattern: "*.sb;*.json"},
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// check if no files were returned
+	if sbFilePath == "" {
+		// TODO: Error?
+		return
+	}
+
+	sbFileBytes, err := os.ReadFile(sbFilePath)
+	if err != nil {
+		panic(err)
+	}
+
+	sb := &soundboard.Soundboard{}
+	if err := json.Unmarshal(sbFileBytes, sb); err != nil {
+		// TODO: handle error message
+		panic(err)
+	}
+
+	b.selectedDeviceID = sb.SelectedDeviceID
+	b.soundHotkeys = sb.SoundHotkeys
+	b.stopHotkey = sb.StopHotkey
+}
+
+func (b *App) SaveSoundboard() {
+	sbFilePath, err := runtime.SaveFileDialog(b.ctx, runtime.SaveDialogOptions{
+		// DefaultDirectory: "",
+		Title: "Load Soundboard...",
+		Filters: []runtime.FileFilter{
+			{DisplayName: "Soundboard File", Pattern: "*.sb;*.json"},
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	sb := &soundboard.Soundboard{
+		SelectedDeviceID: b.selectedDeviceID,
+		SoundHotkeys:     b.soundHotkeys,
+		StopHotkey:       b.stopHotkey,
+	}
+
+	sbBytes, err := json.Marshal(sb)
+	if err != nil {
+		// TODO: display error
+		panic(err)
+	}
+
+	if err := os.WriteFile(sbFilePath, sbBytes, 0644); err != nil {
+		// TODO: display error
+		panic(err)
 	}
 }

@@ -5,20 +5,22 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
 // import { DeviceModule } from './devices/device.module'
 // import { SoundModule } from './sounds/sound.module'
+import { AppHeaderComponent } from './app-header/app-header.component'
 
 import { provideRouter, RouterModule } from '@angular/router';
 import routeConfig from './routes';
+import { MenuModule } from "./menu/menu.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AppHeaderComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule,
     HomeModule,
-    // DeviceModule,
-    // SoundModule,
+    MenuModule
   ],
   providers: [provideRouter(routeConfig)],
   bootstrap: [AppComponent]

@@ -41,7 +41,7 @@ export class HotkeyEditorComponent {
       if (this.soundHotkey == undefined) {
         // TODO: ERROR, this should never happen
       }
-      this.oldHotkey = this.soundHotkey?.Hotkey;
+      this.oldHotkey = this.soundHotkey?.hotkey;
     }
   }
 

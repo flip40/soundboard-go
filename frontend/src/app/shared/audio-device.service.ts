@@ -18,6 +18,8 @@ export class AudioDeviceService {
   updateAudioDevices() {
     GetPlaybackDeviceInfo().then((audioDevices) => {
       this.audioDevices.set(audioDevices);
+      this.selectedDevice.set(audioDevices.find(audioDevice => audioDevice.Selected));
+      console.log("selected device:", this.selectedDevice());
     });
   }
 }

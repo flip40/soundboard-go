@@ -26,12 +26,24 @@ export function GetStopHotkey() {
   return window['go']['main']['App']['GetStopHotkey']();
 }
 
+export function LoadSoundboard() {
+  return window['go']['main']['App']['LoadSoundboard']();
+}
+
 export function PlaySound(arg1) {
   return window['go']['main']['App']['PlaySound'](arg1);
 }
 
 export function RemoveSound(arg1) {
   return window['go']['main']['App']['RemoveSound'](arg1);
+}
+
+export function ResetSoundboard() {
+  return window['go']['main']['App']['ResetSoundboard']();
+}
+
+export function SaveSoundboard() {
+  return window['go']['main']['App']['SaveSoundboard']();
 }
 
 export function SetHotkey(arg1, arg2) {

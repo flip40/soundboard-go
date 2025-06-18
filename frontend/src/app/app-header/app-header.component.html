@@ -1,0 +1,11 @@
+<div> <!--Title -->
+    <div>
+        @for (group of menuGroups; track $index) {
+        <!-- <menu-group (mouseenter)="onMouseEnter($index)" (click)="activateMenu()" [title]="group.title" [menuList]="group.menuList"></menu-group> -->
+        <menu-group (mouseenter)="onMouseEnter($index)" (click)="activateMenu()" (notClicked)="deactivteMenu()"
+            [title]="group.title" [menuList]="group.menuList" [isActive]="isGroupActive($index)"></menu-group>
+        }
+    </div>
+    <!-- window title -->
+    <!-- window controls -->
+</div>

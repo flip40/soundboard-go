@@ -1,7 +1,7 @@
 <div>
     <!-- <select [(ngModel)]="selectedDevice" (ngModelChange)="onChange($event)"> -->
     <select [(ngModel)]="this.audioDeviceService.selectedDevice" (ngModelChange)="onChange($event)">
-        <option value="" disabled selected>Select a device...</option>
+        <option value="undefined" disabled selected>Select a device...</option>
         <!-- <option *ngFor="let option of options" [value]="option.value"> -->
         <!-- @for (device of devices; track $index) {
             <option value="{{device.ID}}">

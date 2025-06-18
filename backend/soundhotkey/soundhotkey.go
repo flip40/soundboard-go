@@ -19,9 +19,9 @@ func (hotkey Hotkey) String() string {
 }
 
 type SoundHotkey struct {
-	ID     uuid.UUID
-	Path   string
-	Hotkey Hotkey
+	ID     uuid.UUID `json:"id"`
+	Path   string    `json:"path"`
+	Hotkey Hotkey    `json:"hotkey"`
 }
 
 func NewSoundHotkey(path string, hotkey []uint16) *SoundHotkey {

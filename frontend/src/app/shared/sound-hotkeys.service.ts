@@ -18,7 +18,7 @@ export class SoundHotkeysService {
   }
 
   getHotkeyByID(id: number[]): soundhotkey.SoundHotkey | undefined {
-    return this.soundHotkeys().find(soundHotkey => soundHotkey.ID == id);
+    return this.soundHotkeys().find(soundHotkey => soundHotkey.id == id);
   }
 
   getStopHotkey(): number[] | undefined {

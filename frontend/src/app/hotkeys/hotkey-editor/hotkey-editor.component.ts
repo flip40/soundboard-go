@@ -1,12 +1,10 @@
 import { Component, inject, signal, HostListener, WritableSignal } from '@angular/core';
-import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { KeycodeService } from 'src/app/shared/keycode.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
-import { keycodes, soundhotkey } from 'wailsjs/go/models';
 import { debounce, BetterSet } from 'src/utils/helpers'
-import { SetHotkey, SetStopHotkey, ClearHotkey, ClearStopHotkey } from 'wailsjs/go/main/App';
-// import { AddSounds } from 'wailsjs/go/main/App'
-// import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys/sound-hotkeys.service';
+import { SetHotkey, SetStopHotkey, ClearHotkey, ClearStopHotkey, ErrorDialog } from 'wailsjs/go/main/App';
+import { keycodes, soundhotkey } from 'wailsjs/go/models';
 
 @Component({
   selector: 'hotkey-editor',
@@ -18,7 +16,6 @@ export class HotkeyEditorComponent {
   keycodeService: KeycodeService = inject(KeycodeService);
   soundHotkeysService = inject(SoundHotkeysService);
 
-  // soundHotkeyID: WritableSignal<number[]> = signal([]);
   soundHotkeyID: WritableSignal<number[]> = signal([]);
   soundHotkey: soundhotkey.SoundHotkey | undefined;
   oldHotkey: number[] | undefined = [];
@@ -39,7 +36,8 @@ export class HotkeyEditorComponent {
       this.soundHotkeyID.set(snapshot.params['id']);
       this.soundHotkey = this.soundHotkeysService.getHotkeyByID(this.soundHotkeyID());
       if (this.soundHotkey == undefined) {
-        // TODO: ERROR, this should never happen
+        ErrorDialog("Invalid Sound Hotkey!");
+        this.router.navigate([""]);
       }
       this.oldHotkey = this.soundHotkey?.hotkey;
     }
@@ -80,7 +78,6 @@ export class HotkeyEditorComponent {
       return;
     }
 
-    // this.setState({ hotkey: [...modifiers.sort(), selectedKey].join("+") });
     this.newHotkey = [...modifiers.sort((a: keycodes.Keycode, b: keycodes.Keycode) => a.Display.localeCompare(b.Display)), selectedKey];
     this.keysPressed = new BetterSet<string>();
   }, 100);

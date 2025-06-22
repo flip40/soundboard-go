@@ -1,18 +1,10 @@
 <div class="wrapper">
-    <!-- <select [(ngModel)]="selectedDevice" (ngModelChange)="onChange($event)"> -->
     <select [(ngModel)]="this.audioDeviceService.selectedDevice" (ngModelChange)="onChange($event)">
         <option value="undefined" disabled selected>Select a device...</option>
-        <!-- <option *ngFor="let option of options" [value]="option.value"> -->
-        <!-- @for (device of devices; track $index) {
-            <option value="{{device.ID}}">
-                {{ device.Name }}
-            </option>
-        } -->
         @for (audioDevice of this.audioDeviceService.audioDevices(); track $index) {
         <option [ngValue]="audioDevice">
             {{ audioDevice.Name }}
         </option>
         }
     </select>
-    <!-- <p>{{ selectedDevice }}</p> -->
 </div>

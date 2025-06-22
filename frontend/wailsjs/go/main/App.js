@@ -14,6 +14,10 @@ export function ClearStopHotkey() {
   return window['go']['main']['App']['ClearStopHotkey']();
 }
 
+export function ErrorDialog(arg1) {
+  return window['go']['main']['App']['ErrorDialog'](arg1);
+}
+
 export function GetPlaybackDeviceInfo() {
   return window['go']['main']['App']['GetPlaybackDeviceInfo']();
 }

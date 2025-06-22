@@ -1,7 +1,6 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { KeycodeService } from 'src/app/shared/keycode.service';
 import { keycodes } from 'wailsjs/go/models';
-// import { GetKeycodes } from 'wailsjs/go/keycodes/KeycodeHelper';
 
 @Component({
   selector: 'app-root',
@@ -11,14 +10,8 @@ import { keycodes } from 'wailsjs/go/models';
 })
 export class AppComponent {
   keycodeService: KeycodeService = inject(KeycodeService);
-  // title = 'frontend';
-  // keycodes: Record<number, string> = {};
 
-  constructor() {
-    // GetKeycodes().then((keycodes) => {
-    //   this.keycodes = keycodes;
-    // });
-  }
+  constructor() { }
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
@@ -27,9 +20,4 @@ export class AppComponent {
       event.preventDefault();
     }
   }
-
-
-  // GetPlaybackDeviceInfo().then((devices) => {
-  //   this.devices = devices;
-  // });
 }

@@ -1,14 +1,8 @@
-import { Component, Input, inject, signal, WritableSignal, ElementRef, ChangeDetectorRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, inject, ElementRef, ChangeDetectorRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
-import { ShowDialog } from 'wailsjs/go/main/App';
+import { MenuItem } from 'src/app/menu/menu-list/menu-list.component';
 import { KeycodeService } from 'src/app/shared/keycode.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
-import { MenuItem, MenuListComponent } from 'src/app/menu/menu-list/menu-list.component';
-// import { HotkeyToString } from 'wailsjs/go/soundhotkey/HotkeyHelper';
-
-// TODO: This almost certainly should be passed in by App initially and updated in a different way...
-// import { GetPlaybackDeviceInfo } from "../../../../wailsjs/go/main/App"
-// import { audiodevice } from 'wailsjs/go/models';
 
 @Component({
   selector: 'sound-list',
@@ -42,9 +36,6 @@ export class SoundListComponent implements AfterViewChecked {
     },
   ]
 
-  // soundHotkeys: soundhotkey.SoundHotkey[] = [];
-  // selectedDevice: number[] = [];
-
   constructor(private router: Router, private cdr: ChangeDetectorRef) {
     this.soundHotkeysService.updateHotkeys();
   }
@@ -71,17 +62,17 @@ export class SoundListComponent implements AfterViewChecked {
 
   editHotkey(hotkeyID: number[] | undefined) {
     if (hotkeyID == undefined) {
-      // TODO: error?
       return
     }
+
     this.router.navigate(["/edit-hotkey", hotkeyID]);
   }
 
   removeSound(hotkeyID: number[] | undefined) {
     if (hotkeyID == undefined) {
-      // TODO: error?
       return
     }
+
     this.soundHotkeysService.removeSound(hotkeyID);
     this.contextMenuActive = false;
   }

@@ -5,7 +5,6 @@
             <div class="cell" [style.padding-right.px]="headerPadding">Hotkey</div>
         </div>
     </div>
-    <!-- <div class="body" [style.scrollbar-gutter]="getScrollbarGutter()"> -->
     <div #body class="body">
         @for (hotkey of this.soundHotkeysService.soundHotkeys(); track hotkey.id) {
         <div class="row" (dblclick)="editHotkey(hotkey.id)" (contextmenu)="openContextMenu($event, hotkey.id)">

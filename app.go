@@ -11,7 +11,6 @@ import (
 	"sort"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/flip40/soundboard-go/backend/audiodevice"
 	"github.com/flip40/soundboard-go/backend/soundboard"
@@ -51,9 +50,10 @@ func (b *App) startup(ctx context.Context) {
 
 	// AUDIO SETUP
 	audioCtx, err := malgo.InitContext(nil, malgo.ContextConfig{}, func(message string) {
-		fmt.Printf("LOG <%v>\n", message)
+		runtime.LogDebugf(b.ctx, "MALGO > %s\n", message)
 	})
 	if err != nil {
+		runtime.LogErrorf(b.ctx, "failed to initialize malgo context: %s", err.Error())
 		panic(err)
 	}
 	b.audioCtx = audioCtx
@@ -94,7 +94,17 @@ func (b *App) ShowDialog(message string) {
 		Title:   "Native Dialog from Go",
 		Message: message,
 	}); err != nil {
-		panic(err)
+		runtime.LogError(b.ctx, err.Error())
+	}
+}
+
+func (b *App) ErrorDialog(message string) {
+	if _, err := runtime.MessageDialog(b.ctx, runtime.MessageDialogOptions{
+		Type:    runtime.ErrorDialog,
+		Title:   "Error!",
+		Message: message,
+	}); err != nil {
+		runtime.LogError(b.ctx, err.Error())
 	}
 }
 
@@ -107,12 +117,12 @@ func (b *App) AddSounds() {
 		},
 	})
 	if err != nil {
-		panic(err)
+		b.ErrorDialog("Failed to open sound files")
+		runtime.LogError(b.ctx, err.Error())
 	}
 
-	// check if no files were returned
+	// check if no files were returned (user cancelled)
 	if sounds == nil {
-		// TODO: Error?
 		return
 	}
 
@@ -121,17 +131,7 @@ func (b *App) AddSounds() {
 	}
 }
 
-// func (b *App) GetPlaybackDeviceInfo() []malgo.DeviceInfo {
-// 	audioDevices, err := b.audioCtx.Devices(malgo.Playback)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return audioDevices
-// }
-
 func (b *App) GetPlaybackDeviceInfo() []audiodevice.AudioDevice {
-	// TODO: build this list (and a string map!) on startup
 	audioDevices, err := b.audioCtx.Devices(malgo.Playback)
 	if err != nil {
 		panic(err)
@@ -174,11 +174,10 @@ func (b *App) PlaySound(path string) {
 		return
 	}
 
-	// TODO: Get path from hotkey input
-	// path := "path-to-sound-file"
 	file, err := os.Open(path)
 	if err != nil {
-		panic(err)
+		b.ErrorDialog(fmt.Sprintf("Could not open file at: %s", path))
+		runtime.LogError(b.ctx, err.Error())
 	}
 	defer file.Close()
 
@@ -189,7 +188,8 @@ func (b *App) PlaySound(path string) {
 		w := wav.NewReader(file)
 		f, err := w.Format()
 		if err != nil {
-			panic(err)
+			b.ErrorDialog(fmt.Sprintf("Could not read .wav file at: %s", path))
+			runtime.LogError(b.ctx, err.Error())
 		}
 
 		reader = w
@@ -199,15 +199,15 @@ func (b *App) PlaySound(path string) {
 	case ".mp3":
 		m, err := mp3.NewDecoder(file)
 		if err != nil {
-			panic(err)
+			b.ErrorDialog(fmt.Sprintf("Could not read .mp3 file at: %s", path))
+			runtime.LogError(b.ctx, err.Error())
 		}
 
 		reader = m
 		channels = 2
 		sampleRate = uint32(m.SampleRate())
 	default:
-		// TODO: Warn with dialogue and return instead of panic
-		panic("Not a valid file.")
+		b.ErrorDialog(fmt.Sprintf("Could not play file at: %s", path))
 	}
 
 	deviceConfig := malgo.DefaultDeviceConfig(malgo.Playback)
@@ -219,15 +219,12 @@ func (b *App) PlaySound(path string) {
 
 	stopChan := make(chan struct{})
 	var stopOnce sync.Once
-	// stopFunc := func() {
-	// 	close(stopChan)
-	// }
+
 	b.stopFuncs[&stopOnce] = func() {
 		close(stopChan)
 	}
 	deviceCallbacks := malgo.DeviceCallbacks{
 		Data: func(pOutputSample, pInputSamples []byte, framecount uint32) {
-			// TODO: need to make some kind of interrupt here ? Use sync.Once
 			if _, err := io.ReadFull(reader, pOutputSample); err != nil {
 				stopOnce.Do(b.stopFuncs[&stopOnce])
 			}
@@ -239,34 +236,24 @@ func (b *App) PlaySound(path string) {
 
 	device, err := malgo.InitDevice(b.audioCtx.Context, deviceConfig, deviceCallbacks)
 	if err != nil {
+		runtime.LogErrorf(b.ctx, "failed to initialize malgo device: %s", err.Error())
 		panic(err)
 	}
 	defer device.Uninit()
 
 	if err = device.Start(); err != nil {
+		runtime.LogErrorf(b.ctx, "failed to start playback device: %s", err.Error())
 		panic(err)
 	}
 
-	// TODO: add go func to listen for stop key
+	// block until stopped
+	<-stopChan
 
-	var counter int
-Playing:
-	for {
-		select {
-		case _, ok := <-stopChan:
-			if !ok {
-				b.stopFuncsMutex.Lock()
-				defer b.stopFuncsMutex.Unlock()
+	// cleanup stop funcs
+	b.stopFuncsMutex.Lock()
+	defer b.stopFuncsMutex.Unlock()
 
-				delete(b.stopFuncs, &stopOnce)
-				break Playing
-			}
-		// TODO: REMOVE DEBUG!!!
-		case <-time.After(time.Second):
-			counter++
-			runtime.LogDebugf(b.ctx, "%d", counter)
-		}
-	}
+	delete(b.stopFuncs, &stopOnce)
 }
 
 func (b *App) StopAllSounds() {
@@ -324,8 +311,6 @@ func (b *App) checkHotkeys() {
 		}
 
 		if isPressed {
-			// TODO: PLAY SOUND
-			// fmt.Printf("Playing Sound for '%s'\n", sound.Path)
 			go b.PlaySound(sound.Path)
 		}
 	}
@@ -351,19 +336,17 @@ func (b *App) checkStopHotkey() {
 }
 
 func (b *App) SetHotkey(id string, hotkey []uint16) {
-	fmt.Printf("\n\nID TEST %+v\n\n", id)
-	// idAsUUID, _ := uuid.FromBytes(id[:])
-	fmt.Printf("setting hotkey %s to %+v\n", id, hotkey)
+	found := false
 	for i, sh := range b.soundHotkeys {
 		if sh.ID.String() == id {
 			b.soundHotkeys[i].Hotkey = hotkey
+			found = true
 		}
 	}
-	// TODO: log error if not found?
 
-	// TODO: DEBUG
-
-	fmt.Printf("Hotkeys after set: %+v\n", b.soundHotkeys)
+	if !found {
+		runtime.LogErrorf(b.ctx, "failed to update hotkey, id wasn't found in sound hotkey map: %s", id)
+	}
 }
 
 // b.soundHotkeys = slices.Delete(b.soundHotkeys, i, i+1)
@@ -375,9 +358,6 @@ func (b *App) ClearHotkey(id string) {
 			b.soundHotkeys[i].Hotkey = nil
 		}
 	}
-
-	// TODO: DEBUG
-	fmt.Printf("Hotkeys after clear: %+v\n", b.soundHotkeys)
 }
 
 func (b *App) ClearStopHotkey() {
@@ -389,7 +369,6 @@ func (b *App) SetStopHotkey(hotkey []uint16) {
 }
 
 func (b *App) RemoveSound(id string) {
-	fmt.Printf("removing sound: %+v\n", id)
 	for i, sh := range b.soundHotkeys {
 		if sh.ID.String() == id {
 			b.soundHotkeys = slices.Delete(b.soundHotkeys, i, i+1)
@@ -397,6 +376,7 @@ func (b *App) RemoveSound(id string) {
 		}
 	}
 }
+
 func (b *App) ResetSoundboard() {
 	b.StopAllSounds()
 
@@ -416,24 +396,25 @@ func (b *App) LoadSoundboard() {
 		},
 	})
 	if err != nil {
-		panic(err)
+		b.ErrorDialog("Failed to open soundboard file.")
+		runtime.LogError(b.ctx, err.Error())
 	}
 
-	// check if no files were returned
+	// check if no files were returned (user cancelled)
 	if sbFilePath == "" {
-		// TODO: Error?
 		return
 	}
 
 	sbFileBytes, err := os.ReadFile(sbFilePath)
 	if err != nil {
-		panic(err)
+		b.ErrorDialog("Could not read soundboard file.")
+		runtime.LogError(b.ctx, err.Error())
 	}
 
 	sb := &soundboard.Soundboard{}
 	if err := json.Unmarshal(sbFileBytes, sb); err != nil {
-		// TODO: handle error message
-		panic(err)
+		b.ErrorDialog("Invalid soundboard file!")
+		runtime.LogError(b.ctx, err.Error())
 	}
 
 	b.selectedDeviceID = sb.SelectedDeviceID
@@ -450,7 +431,8 @@ func (b *App) SaveSoundboard() {
 		},
 	})
 	if err != nil {
-		panic(err)
+		b.ErrorDialog("Failed to save soundboard file.")
+		runtime.LogError(b.ctx, err.Error())
 	}
 
 	sb := &soundboard.Soundboard{
@@ -461,12 +443,12 @@ func (b *App) SaveSoundboard() {
 
 	sbBytes, err := json.Marshal(sb)
 	if err != nil {
-		// TODO: display error
-		panic(err)
+		b.ErrorDialog("Failed to open soundboard file.")
+		runtime.LogError(b.ctx, err.Error())
 	}
 
 	if err := os.WriteFile(sbFilePath, sbBytes, 0644); err != nil {
-		// TODO: display error
-		panic(err)
+		b.ErrorDialog(fmt.Sprintf("Failed to write soundboard file to %s", sbFilePath))
+		runtime.LogError(b.ctx, err.Error())
 	}
 }

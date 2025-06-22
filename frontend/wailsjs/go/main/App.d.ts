@@ -9,6 +9,8 @@ export function ClearHotkey(arg1:string):Promise<void>;
 
 export function ClearStopHotkey():Promise<void>;
 
+export function ErrorDialog(arg1:string):Promise<void>;
+
 export function GetPlaybackDeviceInfo():Promise<Array<audiodevice.AudioDevice>>;
 
 export function GetSoundHotkeys():Promise<Array<soundhotkey.SoundHotkey>>;

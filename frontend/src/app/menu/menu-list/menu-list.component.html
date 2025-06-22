@@ -1,13 +1,5 @@
 <div>
-    <!-- <div [ngClass]="{'active': isActive}" [ngStyle]="{'left': leftPos(), 'top': topPos()}"> -->
-    <!-- <div [ngClass]="{'active': isActive}" [style.left]="leftPos()" [style.top]="topPos()"> -->
-    <!-- <div [class.hide]="!isActive" [style.left.px]="leftPos" [style.top.px]="topPos"> -->
-    <!-- <div>{{ leftPos }}, {{ topPos }}</div> -->
     @for (menuItem of this.menuItems; track $index) {
-    <!-- <tr (dblclick)="editHotkey(hotkey.ID)" (contextmenu)="openContextMenu($event, hotkey.ID)">
-        <td>{{ fileFromPath(hotkey.Path) }}</td>
-        <td>{{ this.keycodeService.rawcodesToString(hotkey?.Hotkey) }}</td>
-    </tr> -->
     <div class="menu-item" (click)="menuItem.onClick()">{{ menuItem.text }}</div>
     }
 </div>

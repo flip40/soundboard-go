@@ -1,7 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { GetSoundHotkeys } from 'wailsjs/go/main/App';
-import { soundhotkey } from 'wailsjs/go/models';
-import { GetPlaybackDeviceInfo, SetPlaybackDevice } from "wailsjs/go/main/App"
+import { GetPlaybackDeviceInfo } from "wailsjs/go/main/App"
 import { audiodevice } from 'wailsjs/go/models';
 
 @Injectable({
@@ -19,7 +17,6 @@ export class AudioDeviceService {
     GetPlaybackDeviceInfo().then((audioDevices) => {
       this.audioDevices.set(audioDevices);
       this.selectedDevice.set(audioDevices.find(audioDevice => audioDevice.Selected));
-      console.log("selected device:", this.selectedDevice());
     });
   }
 }

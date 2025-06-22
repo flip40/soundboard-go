@@ -1,17 +1,14 @@
-<div class="title-bar"> <!--Title -->
+<div class="title-bar">
     <div class="menu-bar">
         @for (group of menuGroups; track $index) {
-        <!-- <menu-group (mouseenter)="onMouseEnter($index)" (click)="activateMenu()" [title]="group.title" [menuList]="group.menuList"></menu-group> -->
         <menu-group (mouseenter)="onMouseEnter($index)" (click)="toggleMenu()" (notClicked)="deactivteMenu()"
             [title]="group.title" [menuList]="group.menuList" [isActive]="isGroupActive($index)"></menu-group>
         }
     </div>
-    <!-- window title -->
     <div class="window-title">
         <!-- TODO: get title from application file somewhere, not hardcoded -->
         Soundboard
     </div>
-    <!-- window controls -->
     <div class="window-controls">
         <div class="window-control-button" (click)="minimize()">
             <div class="minimize"></div>

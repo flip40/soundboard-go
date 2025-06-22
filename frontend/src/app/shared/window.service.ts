@@ -1,6 +1,5 @@
-import { Injectable, signal, HostListener } from '@angular/core';
-import { GetPlaybackDeviceInfo, SetPlaybackDevice } from "wailsjs/go/main/App"
-import { EventsOn, WindowIsMaximised, WindowMaximise, WindowUnmaximise } from 'wailsjs/runtime/runtime';
+import { Injectable, signal } from '@angular/core';
+import { WindowIsMaximised, WindowMaximise, WindowUnmaximise } from 'wailsjs/runtime/runtime';
 
 @Injectable({
   providedIn: 'root',

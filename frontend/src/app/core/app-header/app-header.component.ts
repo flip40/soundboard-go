@@ -1,12 +1,12 @@
-import { Component, inject, Output, EventEmitter, HostBinding, ElementRef, HostListener } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from '../menu/menu-list/menu-list.component'
-import { MenuGroup, MenuGroupComponent } from '../menu/menu-group/menu-group.component'
-import { ResetSoundboard, LoadSoundboard, SaveSoundboard } from 'wailsjs/go/main/App';
+import { MenuItem } from '../../menu/menu-list/menu-list.component'
+import { MenuGroup } from '../../menu/menu-group/menu-group.component'
 import { AudioDeviceService } from 'src/app/shared/audio-device.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 import { WindowService } from 'src/app/shared/window.service';
-import { Quit, WindowFullscreen, WindowMaximise, WindowMinimise, WindowUnfullscreen, WindowUnmaximise } from 'wailsjs/runtime/runtime';
+import { ResetSoundboard, LoadSoundboard, SaveSoundboard } from 'wailsjs/go/main/App';
+import { Quit, WindowMinimise } from 'wailsjs/runtime/runtime';
 
 @Component({
   selector: 'app-header',

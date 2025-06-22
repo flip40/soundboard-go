@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from '../../menu/menu-list/menu-list.component'
-import { MenuGroup } from '../../menu/menu-group/menu-group.component'
+import { MenuItem } from '../menu/menu-list/menu-list.component'
+import { MenuGroup } from '../menu/menu-group/menu-group.component'
 import { AudioDeviceService } from 'src/app/shared/audio-device.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 import { WindowService } from 'src/app/shared/window.service';

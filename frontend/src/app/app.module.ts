@@ -4,8 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
 import { AppHeaderModule } from './core/app-header/app-header.module';
-import { HomeModule } from './home/home.module';
-import { MenuModule } from "./menu/menu.module";
+import { HomeModule } from './pages/home/home.module';
+import { MenuModule } from "./core/menu/menu.module";
 
 import { provideRouter, RouterModule } from '@angular/router';
 import routeConfig from './routes';

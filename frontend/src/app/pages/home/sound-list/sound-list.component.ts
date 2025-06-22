@@ -1,6 +1,6 @@
 import { Component, inject, ElementRef, ChangeDetectorRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from 'src/app/menu/menu-list/menu-list.component';
+import { MenuItem } from 'src/app/core/menu/menu-list/menu-list.component';
 import { KeycodeService } from 'src/app/shared/keycode.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 

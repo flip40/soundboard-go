@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 
-import { HotkeyEditorComponent } from './hotkey-editor/hotkey-editor.component';
+import { HotkeyEditorComponent } from './hotkey-editor.component';
 // import { DeviceModule } from '../devices/device.module'
 // import { SoundModule } from '../sounds/sound.module'
 
@@ -12,15 +11,10 @@ import { HotkeyEditorComponent } from './hotkey-editor/hotkey-editor.component';
   declarations: [
     HotkeyEditorComponent,
   ],
-  imports: [
-    BrowserModule,
-    // DeviceModule,
-    // SoundModule,
-  ],
+  imports: [],
   exports: [
     HotkeyEditorComponent
   ],
   providers: [],
-  bootstrap: [HotkeyEditorComponent]
 })
 export class HotkeysModule { }

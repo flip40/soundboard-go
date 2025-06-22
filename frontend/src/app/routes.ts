@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home/home.component';
-import { HotkeyEditorComponent } from './hotkeys/hotkey-editor/hotkey-editor.component';
+import { HomeComponent } from './pages/home/home.component';
+import { HotkeyEditorComponent } from './pages/hotkey-editor/hotkey-editor.component';
 
 const routeConfig: Routes = [
   {

@@ -1,0 +1,81 @@
+@use 'src/styles.scss';
+
+.table {
+    user-select: none;
+
+    height: calc(100% - 2px);
+    display: flex;
+    flex-direction: column;
+
+
+    border: 1px solid styles.$primary;
+
+}
+
+.header {
+    background-color: styles.$dropdownBackground; // TODO: this doesn't show, maybe need margin/padding to make an edge visible
+}
+
+.header .row {
+    background-color: styles.$menuBackground;
+    color: styles.$textPrimary;
+}
+
+.body {
+    overflow-y: auto;
+
+
+    // TODO: consider grouping these? not sure if this is nicer or less nice oragnizationally
+    // .row {
+    // }
+
+}
+
+.body .row {
+    color: styles.$textSecondary;
+    background-color: styles.$active;
+
+    &:hover {
+        background-color: styles.$highlight;
+    }
+
+    &:active {
+        background-color: styles.$click;
+    }
+}
+
+.row {
+    display: flex;
+    min-height: 50px;
+}
+
+.header .cell {
+    border: 1px solid styles.$dropdownBackground;
+}
+
+.body .cell {
+    border: 1px solid styles.$primary;
+}
+
+.cell {
+    flex: 4;
+}
+
+.cell:nth-child(1) {
+    flex: 2;
+}
+
+.cell:nth-child(2) {
+    flex: 1;
+}
+
+.row .cell {
+    display: flex;
+    /*  center horiz. */
+    justify-content: center;
+    /*  center vert. */
+    align-items: center;
+
+    padding: 5px;
+    box-sizing: border-box;
+}

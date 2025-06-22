@@ -1,55 +1,19 @@
-<div>
-    <table>
-        <thead id="soundtablehead">
-            <tr>
-                <th>Sound File</th>
-                <th>Hotkey</th>
-            </tr>
-        </thead>
-        <tbody id="soundtablebody">
-            <!-- @for (hotkey of soundHotkeys; track $index) {
-                <tr (dblclick)="editHotkey(hotkey.Hotkey)" (contextmenu)="openContextMenu($event, hotkey.Hotkey)">
-                    <td>{{ fileFromPath(hotkey.Path) }}</td>
-                    <td>{{ hotkeyToString(hotkey.Hotkey) }}</td>
-                </tr>
-            } -->
-            @for (hotkey of this.soundHotkeysService.soundHotkeys(); track hotkey.id) {
-            <tr (dblclick)="editHotkey(hotkey.id)" (contextmenu)="openContextMenu($event, hotkey.id)">
-                <td>{{ fileFromPath(hotkey.path) }}</td>
-                <td>{{ this.keycodeService.rawcodesToString(hotkey?.hotkey) }}</td>
-            </tr>
-            }
-        </tbody>
-    </table>
-    <!-- <EditButtons theme={theme}>
-        <Button theme={theme} onClick={this.addNewSound}>Add Sound(s)</Button>
-        <Button theme={theme} onClick={() => { this.setState({ settingStopHotkey: true }); }}>Set Stop Hotkey</Button>
-    </EditButtons> -->
+<div class="table">
+    <div class="header">
+        <div class="row">
+            <div class="cell">Sound File</div>
+            <div class="cell" [style.padding-right.px]="headerPadding">Hotkey</div>
+        </div>
+    </div>
+    <!-- <div class="body" [style.scrollbar-gutter]="getScrollbarGutter()"> -->
+    <div #body class="body">
+        @for (hotkey of this.soundHotkeysService.soundHotkeys(); track hotkey.id) {
+        <div class="row" (dblclick)="editHotkey(hotkey.id)" (contextmenu)="openContextMenu($event, hotkey.id)">
+            <div class="cell">{{ fileFromPath(hotkey.path) }}</div>
+            <div class="cell">{{ this.keycodeService.rawcodesToString(hotkey?.hotkey) }}</div>
+        </div>
+        }
+    </div>
 </div>
 <menu-list (notClicked)="closeContextMenu()" [leftPos]="contextMenuX" [topPos]="contextMenuY"
     [isActive]="contextMenuActive" [menuItems]="contextMenuItems"></menu-list>
-
-
-<!-- {
-                    this.state.editSound !== null ? <SetHotkeyModal
-                        onSuccess={this.setHotkey}
-                        onCancel={() => { this.setState({ editSound: null }); }}
-                        onClear={this.clearHotkey}
-                        currentHotkey={this.state.sounds[this.state.editSound].hotkey}
-                    /> : null
-                }
-                {
-                    this.state.settingStopHotkey ? <SetHotkeyModal
-                        onSuccess={this.setStopHotkey}
-                        onCancel={() => { this.setState({ settingStopHotkey: false }); }}
-                        currentHotkey={this.state.stopHotkey}
-                    /> : null
-                }
-                {
-                    this.state.contextMenuActive ? <MenuList
-                        elements={this.state.contextMenuElements}
-                        left={this.state.contextMenuX}
-                        top={this.state.contextMenuY}
-                        innerRef={this.node}
-                    /> : null
-                } -->

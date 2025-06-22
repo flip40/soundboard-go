@@ -1,0 +1,37 @@
+@use 'src/styles.scss';
+
+:host {}
+
+.wrapper {
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+device-list {
+    margin: 8px;
+}
+
+sound-list {
+    height: calc(100vh - 138px);
+
+    flex-grow: 1;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.footer {
+    margin: 8px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.button {
+    flex: 1;
+    text-align: center;
+}

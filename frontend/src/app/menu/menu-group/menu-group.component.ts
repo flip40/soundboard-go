@@ -20,12 +20,13 @@ export class MenuGroupComponent {
   menuX: number = 0;
   menuY: number = 0;
 
-  constructor() {
+  constructor(private elementRef: ElementRef) { }
 
-  }
-
-  closeMenu() {
-    this.isActive = false;
+  menuNotClicked(event: MouseEvent) {
+    // Don't handle if other menu group item was clicked
+    if (!this.isActive || this.elementRef.nativeElement.contains(event.target)) {
+      return;
+    }
 
     this.notClicked.emit();
   }

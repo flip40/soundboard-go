@@ -1,0 +1,53 @@
+@use 'src/styles.scss';
+
+:host {
+    margin: 8px;
+}
+
+.current {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.new {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper {
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.key-header {
+    color: styles.$textPrimary;
+    font-weight: bold;
+}
+
+.key-box {
+    color: styles.$textSecondary;
+    background-color: styles.$dropdownBackground;
+    padding: 0.5rem 1rem;
+    width: 13rem;
+    height: 1.2rem;
+    margin: 5px;
+    text-align: center;
+}
+
+.button {
+    flex: 1;
+    text-align: center;
+}

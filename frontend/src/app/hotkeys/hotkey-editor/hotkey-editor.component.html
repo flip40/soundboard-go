@@ -1,16 +1,17 @@
-<div>
-    <!-- <div>
-        <span>Hotkey ID: {{ soundHotkeyID() }}</span>
-    </div> -->
-    <div>
-        <span>{{ this.keycodeService.rawcodesToString(this.oldHotkey) }}</span>
+<div class="wrapper">
+    <div class="row">
+        <div class="current">
+            <div class="key-header">Current Hotkey</div>
+            <div class="key-box">{{ this.keycodeService.rawcodesToString(this.oldHotkey) }}</div>
+        </div>
+        <div class="new">
+            <div class="key-header">New Hotkey</div>
+            <div class="key-box">{{ this.keycodeService.keycodesToString(this.newHotkey) }}</div>
+        </div>
     </div>
-    <div>
-        <span>{{ this.keycodeService.keycodesToString(this.newHotkey) }}</span>
-    </div>
-    <div>
-        <a (click)="setHotkey()">Set Hotkey</a>
-        <a (click)="clearHotkey()">Clear Hotkey</a>
-        <a (click)="goHome()">Cancel</a>
+    <div class="row">
+        <a class="button" (click)="setHotkey()">Set Hotkey</a>
+        <a class="button" (click)="clearHotkey()">Clear Hotkey</a>
+        <a class="button" (click)="goHome()">Cancel</a>
     </div>
 </div>

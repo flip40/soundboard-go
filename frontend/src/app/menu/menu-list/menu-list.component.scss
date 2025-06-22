@@ -1,8 +1,50 @@
+@use 'src/styles.scss';
+
+// menu-list-box
 :host {
+    /* margin: 17px auto; */
+    user-select: none;
+    white-space: nowrap;
+
+    box-shadow: 1px 2px 5px 0px black;
     position: absolute;
-    background-color: white; // TODO: temp for debugging
+    opacity: 1;
+    /* z-index: 2000; */
+
+    color: #FFFFFF;
+    background-color: styles.$dropdownBackground;
+
+    font-family: Segoe WPC, Segoe UI, sans-serif;
+    font-size: 13px;
 }
 
 :host(.hide) {
     display: none;
+}
+
+.menu-item {
+    /* margin: 17px auto; */
+    /* user-select: none; */
+    padding: 0px 30px;
+    line-height: 24px;
+
+    /* color: #FFFFFF; */
+    background-color: styles.$dropdownBackground;
+
+    &:hover {
+        background-color: styles.$highlight;
+    }
+}
+
+.section-divider {
+    margin: 0px 15px;
+    border: .5px solid styles.$menuDivider;
+
+    background-color: styles.$dropdownBackground;
+}
+
+.section {
+    padding: 5px 0px;
+
+    background-color: styles.$dropdownBackground;
 }

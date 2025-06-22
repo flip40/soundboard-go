@@ -1,11 +1,29 @@
-<div> <!--Title -->
-    <div>
+<div class="title-bar"> <!--Title -->
+    <div class="menu-bar">
         @for (group of menuGroups; track $index) {
         <!-- <menu-group (mouseenter)="onMouseEnter($index)" (click)="activateMenu()" [title]="group.title" [menuList]="group.menuList"></menu-group> -->
-        <menu-group (mouseenter)="onMouseEnter($index)" (click)="activateMenu()" (notClicked)="deactivteMenu()"
+        <menu-group (mouseenter)="onMouseEnter($index)" (click)="toggleMenu()" (notClicked)="deactivteMenu()"
             [title]="group.title" [menuList]="group.menuList" [isActive]="isGroupActive($index)"></menu-group>
         }
     </div>
     <!-- window title -->
+    <div class="window-title">
+        <!-- TODO: get title from application file somewhere, not hardcoded -->
+        Soundboard
+    </div>
     <!-- window controls -->
+    <div class="window-controls">
+        <div class="window-control-button" (click)="minimize()">
+            <div class="minimize"></div>
+        </div>
+        <div class="window-control-button" (click)="this.windowService.toggleMaximize()">
+            @if (!this.windowService.isMaximized()) {
+            <div class="maximize"></div>
+            } @else {
+            <div class="unmaximize1"></div>
+            <div class="unmaximize2"></div>
+            }
+        </div>
+        <div class="close-button" (click)="closeApp()">&times;</div>
+    </div>
 </div>

@@ -1,25 +1,27 @@
 import { Component, inject, Output, EventEmitter, HostBinding, ElementRef, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from '../menu/menu-list/menu-list.component'
-import { MenuGroup } from '../menu/menu-group/menu-group.component'
+import { MenuGroup, MenuGroupComponent } from '../menu/menu-group/menu-group.component'
 import { ResetSoundboard, LoadSoundboard, SaveSoundboard } from 'wailsjs/go/main/App';
 import { AudioDeviceService } from 'src/app/shared/audio-device.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
+import { WindowService } from 'src/app/shared/window.service';
+import { Quit, WindowFullscreen, WindowMaximise, WindowMinimise, WindowUnfullscreen, WindowUnmaximise } from 'wailsjs/runtime/runtime';
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
-  // styleUrls: ['./app-header.component.scss'],
+  styleUrls: ['./app-header.component.scss'],
   standalone: false,
 })
 export class AppHeaderComponent {
   audioDeviceService = inject(AudioDeviceService);
   soundHotkeysService = inject(SoundHotkeysService);
-  // @Input() menuItems: MenuItem[] = [];
-  // @Input() isActive: boolean = false;
-  // @HostBinding('style.left.px') @Input() leftPos: number = 0;
-  // @HostBinding('style.top.px') @Input() topPos: number = 0;
-  // @HostBinding('class.hide') get shouldHide(): boolean { return !this.isActive; };
-  // @Output() notClicked = new EventEmitter<void>();
+  windowService = inject(WindowService);
+
+  menuActive: boolean = false;
+  activeGroup: number = 0;
+
   fileMenu: MenuItem[] = [
     {
       text: "New Soundboard...",
@@ -44,22 +46,27 @@ export class AppHeaderComponent {
     {
       title: "File",
       menuList: this.fileMenu,
-    }
+    },
+    // {
+    //   title: "Edit",
+    //   menuList: [
+    //     {
+    //       text: "blerh...",
+    //       onClick: () => this.newSoundboard(),
+    //     },
+    //   ],
+    // },
   ]
 
-  menuActive: boolean = false;
-  activeGroup: number = 0;
-
-  constructor() {
-
-  }
+  constructor(private router: Router) { }
 
   onMouseEnter(index: number) {
     this.activeGroup = index;
   }
 
-  activateMenu() {
-    this.menuActive = true;
+  // TODO: handle menu is active and hover state changes to another menu group
+  toggleMenu() {
+    this.menuActive = !this.menuActive;
   }
 
   deactivteMenu() {
@@ -76,6 +83,7 @@ export class AppHeaderComponent {
       this.audioDeviceService.updateAudioDevices();
       this.soundHotkeysService.updateHotkeys();
       this.deactivteMenu();
+      this.router.navigate([""]);
     });
   }
 
@@ -84,6 +92,7 @@ export class AppHeaderComponent {
       this.audioDeviceService.updateAudioDevices();
       this.soundHotkeysService.updateHotkeys();
       this.deactivteMenu();
+      this.router.navigate([""]);
     });
   }
 
@@ -91,5 +100,15 @@ export class AppHeaderComponent {
     SaveSoundboard().then(() => {
       this.deactivteMenu();
     });
+  }
+
+  minimize() {
+    // TODO: need to remove hover state when un-minimizing
+    WindowMinimise();
+  }
+
+  closeApp() {
+    // TODO: may want to send this to the go app instead to handle "save before close"
+    Quit();
   }
 }

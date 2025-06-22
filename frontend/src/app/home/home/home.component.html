@@ -1,14 +1,8 @@
-<div>
-  <!-- {{ title }} -->
-  <!-- <app-header>
-      <menu />
-  </app-header> -->
-  <!-- <app-body> -->
-      <device-list />
-      <sound-list />
-  <!-- </app-body> -->
-      <div>
-        <a (click)="addSounds()">Add Sound(s)</a>
-        <a (click)="setStopHotkey()">Set Stop Hotkey</a>
-      </div>
+<div class="wrapper">
+  <device-list />
+  <sound-list />
+  <div class="footer">
+    <a class="button" (click)="addSounds()">Add Sound(s)</a>
+    <a class="button" (click)="setStopHotkey()">Set Stop Hotkey</a>
+  </div>
 </div>

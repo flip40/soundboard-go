@@ -16,22 +16,23 @@ export class MenuListComponent {
   @Input() menuItems: MenuItem[] = [];
   @Input() isActive: boolean = false;
   @HostBinding('style.left.px') @Input() leftPos: number = 0;
-  @HostBinding('style.top.px') @Input() topPos: number = 0;
+  @Input() topPos: number = 0;
+  @HostBinding('style.top') get topPosFinal() {
+    return this.topPos == 0 ? `100%` : `${this.topPos}px`; // 100% for title menus, px for context menus
+  };
   @HostBinding('class.hide') get shouldHide(): boolean { return !this.isActive; };
-  @Output() notClicked = new EventEmitter<void>();
+  @Output() notClicked = new EventEmitter<MouseEvent>();
 
-  constructor(private elementRef: ElementRef) {
-
-  }
+  constructor(private elementRef: ElementRef) { }
 
   // Handle any click that isn't in the menu to close the menu
   @HostListener('window:mousedown', ['$event'])
-  onMousedown(event: Event): void {
-    if (this.elementRef.nativeElement.contains(event.target)) {
+  onMousedown(event: MouseEvent): void {
+    if (!this.isActive || this.elementRef.nativeElement.contains(event.target)) {
       return;
     }
 
-    this.notClicked.emit();
+    this.notClicked.emit(event);
   }
 
 }

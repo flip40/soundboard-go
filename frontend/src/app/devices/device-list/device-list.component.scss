@@ -1,0 +1,38 @@
+@use 'src/styles.scss';
+// https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select
+
+.wrapper {
+    display: flex;
+}
+
+select,
+::picker(select) {
+    appearance: base-select;
+}
+
+select {
+    flex: 1;
+    background-color: styles.$primary;
+    color: styles.$textSecondary;
+    border-width: 2;
+    border-color: styles.$dropdownBackground;
+    margin-bottom: 5;
+
+    &:hover {
+        border-color: styles.$highlight;
+    }
+}
+
+option {
+    background-color: styles.$dropdownBackground;
+    color: styles.$textSecondary;
+
+    &:hover,
+    &:focus {
+        background-color: styles.$highlight;
+    }
+
+    &:active {
+        background-color: styles.$click;
+    }
+}

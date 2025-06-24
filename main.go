@@ -4,6 +4,7 @@ import (
 	"embed"
 	"log"
 
+	application "github.com/flip40/soundboard-go/backend/app"
 	"github.com/flip40/soundboard-go/backend/keycodes"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -15,7 +16,7 @@ var assets embed.FS
 
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
+	app := application.NewApp()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -34,14 +35,13 @@ func main() {
 		BackgroundColour:  &options.RGBA{R: 0, G: 56, B: 71, A: 255},
 		Assets:            assets,
 		// LogLevel:          logger.DEBUG,
-		OnStartup:  app.startup,
-		OnDomReady: app.domReady,
-		OnShutdown: app.shutdown,
+		OnStartup: app.Startup,
+		// OnDomReady: app.domReady,
+		OnShutdown: app.Shutdown,
 		Bind: []interface{}{
-			app,
+			application.Exported(app),
 			&keycodes.KeycodeHelper{},
 			&keycodes.Keycode{},
-			// &soundhotkey.HotkeyHelper{},
 		},
 		EnumBind: []interface{}{
 			keycodes.KeycodeGroups,

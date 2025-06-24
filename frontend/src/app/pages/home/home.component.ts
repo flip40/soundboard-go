@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
-import { AddSounds } from 'wailsjs/go/main/App'
+import { AddSounds } from 'wailsjs/go/app/App'
 
 @Component({
   selector: 'home',

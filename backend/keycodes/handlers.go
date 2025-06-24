@@ -15,22 +15,6 @@ func JSCodeToRawcode(jsCode string) uint16 {
 // FOR BINDING TO WAILS
 type KeycodeHelper struct{}
 
-// func (helper KeycodeHelper) ZBindKeycode() Keycode {
-// 	return Keycode{}
-// }
-
-// func (helper KeycodeHelper) RawcodeToString(rawcode uint16) string {
-// 	return RawcodeToString(rawcode)
-// }
-
-// func (helper KeycodeHelper) JSCodeToRawcode(jsCode string) uint16 {
-// 	return JSCodeToRawcode(jsCode)
-// }
-
-// func (helper KeycodeHelper) GetKeycodes() map[uint16]Keycode {
-// 	return allKeycodes.mapByRawcode()
-// }
-
 func (helper KeycodeHelper) GetRawcodeGroups() map[KeycodeGroup]map[uint16]Keycode {
 	return rawcodeGroups
 }

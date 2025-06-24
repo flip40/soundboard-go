@@ -5,7 +5,7 @@ import { MenuGroup } from '../menu/menu-group/menu-group.component'
 import { AudioDeviceService } from 'src/app/shared/audio-device.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 import { WindowService } from 'src/app/shared/window.service';
-import { ResetSoundboard, LoadSoundboard, SaveSoundboard } from 'wailsjs/go/main/App';
+import { ResetSoundboard, LoadSoundboard, SaveSoundboard } from 'wailsjs/go/app/App';
 import { Quit, WindowMinimise } from 'wailsjs/runtime/runtime';
 
 @Component({

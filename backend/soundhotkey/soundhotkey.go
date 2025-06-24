@@ -40,15 +40,3 @@ func NewSoundHotkey(path string, hotkey []uint16) *SoundHotkey {
 func (sh *SoundHotkey) String() string {
 	return fmt.Sprintf("%+v", *sh)
 }
-
-// func (sh SoundHotkey) HotkeyToString() string {
-// 	return sh.Hotkey.String()
-// }
-
-// FOR BINDING TO WAILS
-// type HotkeyHelper struct{}
-
-// func (helper HotkeyHelper) HotkeyToString(hotkey []uint16) string {
-// 	value := Hotkey(hotkey)
-// 	return value.String()
-// }

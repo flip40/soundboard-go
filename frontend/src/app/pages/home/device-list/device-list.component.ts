@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AudioDeviceService } from 'src/app/shared/audio-device.service';
-import { SetPlaybackDevice } from "wailsjs/go/main/App"
+import { SetPlaybackDevice } from "wailsjs/go/app/App"
 import { audiodevice } from 'wailsjs/go/models';
 
 @Component({

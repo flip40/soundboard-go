@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { KeycodeService } from 'src/app/shared/keycode.service';
 import { SoundHotkeysService } from 'src/app/shared/sound-hotkeys.service';
 import { debounce, BetterSet } from 'src/utils/helpers'
-import { SetHotkey, SetStopHotkey, ClearHotkey, ClearStopHotkey, ErrorDialog } from 'wailsjs/go/main/App';
+import { SetHotkey, SetStopHotkey, ClearHotkey, ClearStopHotkey, ErrorDialog } from 'wailsjs/go/app/App';
 import { keycodes, soundhotkey } from 'wailsjs/go/models';
 
 @Component({

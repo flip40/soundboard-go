@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { GetSoundHotkeys, GetStopHotkey, RemoveSound } from 'wailsjs/go/main/App';
+import { GetSoundHotkeys, GetStopHotkey, RemoveSound } from 'wailsjs/go/app/App';
 import { soundhotkey } from 'wailsjs/go/models';
 
 @Injectable({

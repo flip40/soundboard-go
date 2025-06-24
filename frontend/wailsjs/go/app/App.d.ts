@@ -33,6 +33,4 @@ export function SetPlaybackDevice(arg1:string):Promise<void>;
 
 export function SetStopHotkey(arg1:Array<number>):Promise<void>;
 
-export function ShowDialog(arg1:string):Promise<void>;
-
 export function StopAllSounds():Promise<void>;

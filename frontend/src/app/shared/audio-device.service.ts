@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { GetPlaybackDeviceInfo } from "wailsjs/go/main/App"
+import { GetPlaybackDeviceInfo } from "wailsjs/go/app/App"
 import { audiodevice } from 'wailsjs/go/models';
 
 @Injectable({

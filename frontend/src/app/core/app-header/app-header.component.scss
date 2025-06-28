@@ -22,15 +22,13 @@
 .app-icon {
     --wails-draggable: drag;
 
-    width: 35px;
-    height: 100%;
-    position: relative;
-    z-index: 3000;
-    /* background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg width='256' height='256' viewBox='0…or='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E); */
+    width: 2em;
+    height: 2em;
+    display: inline-block;
+    background-image: url("src/assets/appicon.png");
     background-repeat: no-repeat;
     background-position: 50%;
-    background-size: 16px;
-    flex-shrink: 0;
+    background-size: 2em;
 }
 
 .menu-bar {

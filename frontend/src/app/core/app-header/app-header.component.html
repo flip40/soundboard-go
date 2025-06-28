@@ -1,4 +1,7 @@
 <div class="title-bar">
+    <div>
+        <i class="app-icon"></i>
+    </div>
     <div class="menu-bar">
         @for (group of menuGroups; track $index) {
         <menu-group (mouseenter)="onMouseEnter($index)" (click)="toggleMenu()" (notClicked)="deactivteMenu()"
